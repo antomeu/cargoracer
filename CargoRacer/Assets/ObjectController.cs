@@ -28,7 +28,7 @@ public class ObjectController : MonoBehaviour {
 
     void CullObject()
     {
-        if (transform.position.z <= -20f)
+        if (transform.position.z <= -40f)
             transform.position += Globals.ClippingDistance * Vector3.forward;
         else if (transform.position.z >= Globals.ClippingDistance)
             transform.position -= Globals.ClippingDistance * Vector3.forward;
@@ -39,14 +39,16 @@ public class ObjectController : MonoBehaviour {
         
     }
 
-    void OnTriggerEnter1(Collider other)
+    void OnTriggerEnter(Collider other)
     {
+        
         Rigidbody rigidBody = GetComponent<Rigidbody>();
         if (rigidBody != null)
         {
+            Debug.Log(other.gameObject);
             rigidBody.isKinematic = false;
             rigidBody.useGravity = true;
-            rigidBody.AddForce(20*Vector3.one);
+            rigidBody.AddForce(200*Vector3.one);
         }
 
     }
