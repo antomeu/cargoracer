@@ -18,7 +18,12 @@ public class ObjectController : MonoBehaviour {
 
     private void MoveObject()
     {
-        transform.position += Globals.Speed * Time.deltaTime * Vector3.back;
+        if (ObjectType == ObjectType.OncomingVehicle)
+            transform.position += ( 5 - 9/transform.position.x  + Globals.Speed) * Time.deltaTime * Vector3.back;
+        else if (ObjectType == ObjectType.SameLaneVehicle)
+            transform.position += (-5 - 9/transform.position.x  + Globals.Speed) * Time.deltaTime * Vector3.back;
+        else
+            transform.position += Globals.Speed * Time.deltaTime * Vector3.back;
     }
 
     void CullObject()
@@ -27,5 +32,22 @@ public class ObjectController : MonoBehaviour {
             transform.position += Globals.ClippingDistance * Vector3.forward;
         else if (transform.position.z >= Globals.ClippingDistance)
             transform.position -= Globals.ClippingDistance * Vector3.forward;
+    }
+
+    void SendFlyinOff()
+    {
+        
+    }
+
+    void OnTriggerEnter1(Collider other)
+    {
+        Rigidbody rigidBody = GetComponent<Rigidbody>();
+        if (rigidBody != null)
+        {
+            rigidBody.isKinematic = false;
+            rigidBody.useGravity = true;
+            rigidBody.AddForce(20*Vector3.one);
+        }
+
     }
 }
