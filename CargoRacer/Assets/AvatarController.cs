@@ -84,12 +84,13 @@ public class AvatarController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        var otherObject = other.gameObject.GetComponentInParent<ObjectController>().ObjectType;
-        if (otherObject == ObjectType.SameLaneVehicle)
+        var otherObjectType = other.gameObject.GetComponentInParent<ObjectController>().ObjectType;
+        Debug.Log(other.gameObject.name);
+        if (otherObjectType == ObjectType.SameLaneVehicle)
             speed = 15f;
-        else if (otherObject == ObjectType.OncomingVehicle)
+        else if (otherObjectType == ObjectType.OncomingVehicle)
             speed = 5f;
-        else if (otherObject == ObjectType.Package)
+        else if (otherObjectType == ObjectType.Package)
             speed = 80f;
     }
 

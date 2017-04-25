@@ -18,6 +18,7 @@ public class VehicleCollisionController : MonoBehaviour
             VehicleRigidbody.isKinematic = true;
             VehicleRigidbody.useGravity = false;
             transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
             VehiclCollider.enabled = true;
         }
     }
@@ -34,9 +35,15 @@ public class VehicleCollisionController : MonoBehaviour
                 VehicleRigidbody.isKinematic = false;
                 VehicleRigidbody.useGravity = true;
                 if (GetComponentInParent<ObjectController>().ObjectType == ObjectType.OncomingVehicle)
+                {
                     VehicleRigidbody.AddForce(600* new Vector3(-1,1,1));
+                    VehicleRigidbody.AddTorque(0,0,500 );
+                }
                 if (GetComponentInParent<ObjectController>().ObjectType == ObjectType.SameLaneVehicle)
+                {
                     VehicleRigidbody.AddForce(600 * new Vector3(1, 1, 1));
+                    VehicleRigidbody.AddTorque(0, 0, -500);
+                }
                 VehiclCollider.enabled = false;
             }
         }
