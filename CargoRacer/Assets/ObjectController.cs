@@ -34,22 +34,7 @@ public class ObjectController : MonoBehaviour {
             transform.position -= Globals.ClippingDistance * Vector3.forward;
     }
 
-    void SendFlyinOff()
-    {
-        
-    }
 
-    void OnTriggerEnter(Collider other)
-    {
-        
-        Rigidbody rigidBody = GetComponent<Rigidbody>();
-        if (rigidBody != null)
-        {
-            Debug.Log(other.gameObject);
-            rigidBody.isKinematic = false;
-            rigidBody.useGravity = true;
-            rigidBody.AddForce(200*Vector3.one);
-        }
 
-    }
+
 }

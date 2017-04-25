@@ -9,11 +9,14 @@ public class AvatarController : MonoBehaviour
     #region SET IN UNITY
     public float LaneWidth = 6f;
     public float LaneChangingSpeed = 36f;
+
+    public float AccelerationRate = 1;
+    public float DeccelerationRate = 1;
     #endregion
 
     public float speed;
     private float[] LaneCoordinates = new float[4];
-    public int CurrentLane = 2;
+    private int currentLane = 2;
     private int movingDirection;
     private bool hasReachedLane;
 
@@ -26,44 +29,68 @@ public class AvatarController : MonoBehaviour
             LaneCoordinates[i] = LaneWidth * (i - 3/2) - 3; //LaneWidth /2*((i - 2) + 1);
         }
         speed = 20f;
-        CurrentLane = 2;
-        transform.position = LaneCoordinates[CurrentLane] * Vector3.right;
+        currentLane = 2;
+        transform.position = LaneCoordinates[currentLane] * Vector3.right;
     }
 	
 	// Update is called once per frame
 	void Update ()
 	{
-        MoveAvatar();
+        MoveAvatarSideWays();
+        ManageSpeed();
         Globals.Speed = speed;
-
     }
 
-    void MoveAvatar()
+    void MoveAvatarSideWays()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && CurrentLane > 0)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && currentLane > 0)
         {
             movingDirection = -1;
-            CurrentLane += movingDirection;
+            currentLane += movingDirection;
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && CurrentLane < LaneCoordinates.Length - 1)
+        if (Input.GetKeyDown(KeyCode.RightArrow) && currentLane < LaneCoordinates.Length - 1)
         {
             movingDirection = 1;
-            CurrentLane += movingDirection;
+            currentLane += movingDirection;
         }
 
-        if (Math.Abs(transform.position.x - LaneCoordinates[CurrentLane]) > 0.1f)
+        if (Math.Abs(transform.position.x - LaneCoordinates[currentLane]) > 0.1f)
         {
-            var damping = Mathf.Abs(transform.position.x - LaneCoordinates[CurrentLane])/LaneWidth;
+            var damping = Mathf.Abs(transform.position.x - LaneCoordinates[currentLane])/LaneWidth;
             transform.position += (movingDirection * LaneChangingSpeed * Time.deltaTime) * damping * Vector3.right;
             transform.rotation = Quaternion.Euler(0,movingDirection * damping * 15f ,0);
         }
         else
         {
             hasReachedLane = true;
-            transform.position = LaneCoordinates[CurrentLane] * Vector3.right;
+            transform.position = LaneCoordinates[currentLane] * Vector3.right;
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
 
     }
+
+    void ManageSpeed()
+    {
+        if (Mathf.Abs(speed - Globals.NominalSpeed) > 0.1)
+        {
+            speed += (-speed + Globals.NominalSpeed) * AccelerationRate * Time.deltaTime;
+        }
+        else
+        {
+            speed = Globals.NominalSpeed;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        var otherObject = other.gameObject.GetComponentInParent<ObjectController>().ObjectType;
+        if (otherObject == ObjectType.SameLaneVehicle)
+            speed = 15f;
+        else if (otherObject == ObjectType.OncomingVehicle)
+            speed = 5f;
+        else if (otherObject == ObjectType.Package)
+            speed = 80f;
+    }
+
 }
