@@ -13,7 +13,8 @@ public class UIController : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+	{
+	    DistanceText.text = Mathf.CeilToInt(Globals.Distance / 10000f).ToString();
 	}
 }
