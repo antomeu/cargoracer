@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using UnityEngine;
 
 public class AvatarController : MonoBehaviour
@@ -32,12 +33,14 @@ public class AvatarController : MonoBehaviour
     }
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
 	{
         MoveAvatarSideWays();
         ManageSpeed();
         Globals.Speed = speed;
-    }
+	    Globals.Distance += speed/Time.deltaTime;
+
+	}
 
     void MoveAvatarSideWays()
     {
@@ -88,8 +91,9 @@ public class AvatarController : MonoBehaviour
             speed = 15f;
         else if (otherObjectType == ObjectType.OncomingVehicle)
             speed = 5f;
-        else if (otherObjectType == ObjectType.Package)
+        else if (otherObjectType == ObjectType.BonusBoost)
             speed = 80f;
     }
+
 
 }

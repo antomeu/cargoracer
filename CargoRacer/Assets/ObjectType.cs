@@ -6,5 +6,8 @@
     Prop,
     OncomingVehicle,
     SameLaneVehicle,
-    Package
+    Package,
+    PackageDrop,
+    BonusBoost,
+
 }

@@ -25,7 +25,7 @@ public class ObjectController : MonoBehaviour {
 
     void CullObject()
     {
-        if (transform.position.z <= -40f)
+        if (transform.position.z <= -60f)
             transform.position += Globals.ClippingDistance * Vector3.forward;
         else if (transform.position.z >= Globals.ClippingDistance)
             transform.position -= Globals.ClippingDistance * Vector3.forward;
