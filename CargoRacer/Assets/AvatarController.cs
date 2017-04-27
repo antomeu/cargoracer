@@ -11,6 +11,9 @@ public class AvatarController : MonoBehaviour
 
     public float AccelerationRate = 1;
     public float DeccelerationRate = 1;
+
+    public PackageSlotController[] PackageSlot = new PackageSlotController[3];
+
     #endregion
 
     public float speed;
@@ -19,6 +22,7 @@ public class AvatarController : MonoBehaviour
     private int movingDirection;
     private bool hasReachedLane;
 
+    
 
 
     // Use this for initialization
@@ -86,13 +90,65 @@ public class AvatarController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         var otherObjectType = other.gameObject.GetComponentInParent<ObjectController>().ObjectType;
-        Debug.Log(other.gameObject.name);
+        //Debug.Log(other.gameObject.name);
         if (otherObjectType == ObjectType.SameLaneVehicle)
+        {
             speed = 15f;
+            Globals.Lives--;
+            
+        }
         else if (otherObjectType == ObjectType.OncomingVehicle)
+        {
             speed = 5f;
+            Globals.Lives--;
+        }
         else if (otherObjectType == ObjectType.BonusBoost)
             speed = 80f;
+        else if (otherObjectType == ObjectType.Package)
+            PickPackageUp(other);
+        else if (otherObjectType == ObjectType.PackageDrop)
+            DropPackageOff(other);
+
+    }
+
+    void PickPackageUp(Collider other)
+    {
+        //other.transform.parent.gameObject 
+        for (int i = 0; i <= PackageSlot.Length-1; i++)
+        {
+            if (PackageSlot[i].SlotAvailable)
+            {
+                PackageSlot[i].ActivatePackage(PackageSlot[i], other.gameObject);
+                Globals.PackageSlotIsUsed[i] = true;
+                ObjectController otherObject = other.GetComponent<ObjectController>();
+                Debug.Log(otherObject);
+                if (otherObject.ChildObject != null)// Disable package on the ground until respawn
+                    otherObject.ChildObject.SetActive(false);
+                return;
+            }
+        }
+
+        if (!PackageSlot[PackageSlot.Length-1].SlotAvailable)//if full, do not pick up and show message
+        {
+            return;
+        }
+
+    }
+    
+
+    void DropPackageOff(Collider other)
+    {
+        // Deactivate this slot with apropriate package
+        for (int i = 0; i <= PackageSlot.Length-1; i++)
+        {
+            if (!PackageSlot[i].SlotAvailable)
+            {
+                PackageSlot[i].DeactivatePackages();
+                Globals.PackageSlotIsUsed[i] = false;
+                Globals.PackagesDelivered++;
+                return;
+            }
+        }
     }
 
 

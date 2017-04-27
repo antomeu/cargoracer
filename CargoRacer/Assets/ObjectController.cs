@@ -2,6 +2,7 @@
 
 public class ObjectController : MonoBehaviour {
     public ObjectType ObjectType;
+    public GameObject ChildObject;
 	// Use this for initialization
 	void Start () {
 		
@@ -26,7 +27,15 @@ public class ObjectController : MonoBehaviour {
     void CullObject()
     {
         if (transform.position.z <= -60f)
+        {
             transform.position += Globals.ClippingDistance * Vector3.forward;
+            if (ObjectType == ObjectType.BonusBoost || ObjectType == ObjectType.Package || ObjectType == ObjectType.PackageDrop)
+            {
+                transform.position = new Vector3((Mathf.Ceil(18 * Random.value) - 9f), transform.position.y, transform.position.z);
+                if (ChildObject != null || ChildObject.activeSelf)
+                    ChildObject.SetActive(true);
+            }
+        }
         else if (transform.position.z >= Globals.ClippingDistance)
             transform.position -= Globals.ClippingDistance * Vector3.forward;
     }

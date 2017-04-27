@@ -27,7 +27,7 @@ public class VehicleCollisionController : MonoBehaviour
         
         if (VehicleRigidbody != null)
         {
-            Debug.Log(other.gameObject);
+            //Debug.Log(other.gameObject);
             if (other.name == "Player")
             {
                 VehicleRigidbody.isKinematic = false;
