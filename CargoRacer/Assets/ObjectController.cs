@@ -24,7 +24,7 @@ public class ObjectController : MonoBehaviour {
             transform.position += Globals.Speed * Time.deltaTime * Vector3.back;
     }
 
-    void CullObject()
+    private void CullObject()
     {
         if (transform.position.z <= -60f)
         {
@@ -32,7 +32,7 @@ public class ObjectController : MonoBehaviour {
             if (ObjectType == ObjectType.BonusBoost || ObjectType == ObjectType.Package || ObjectType == ObjectType.PackageDrop)
             {
                 transform.position = new Vector3((Mathf.Ceil(18 * Random.value) - 9f), transform.position.y, transform.position.z);
-                if (ChildObject != null || ChildObject.activeSelf)
+                if (ChildObject != null || !ChildObject.activeSelf)
                     ChildObject.SetActive(true);
             }
         }
@@ -40,7 +40,11 @@ public class ObjectController : MonoBehaviour {
             transform.position -= Globals.ClippingDistance * Vector3.forward;
     }
 
-
+    public void HideChildObject() // This hides the mesh, collider and rigidbodies but keep the script active
+    {
+        if (ChildObject != null)
+            ChildObject.SetActive(false);
+    }
 
 
 }

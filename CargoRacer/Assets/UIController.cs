@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
     public Text PackagesDeliveredText;
     public Image LivesFillImage;
     public Image[] PackageImages = new Image[3];
+    public GameObject EndGamePanel;
     #endregion
     private float totalLives;
 
@@ -17,7 +18,9 @@ public class UIController : MonoBehaviour
     void Start () {
         totalLives = Globals.Lives;
         UpdateLivesUI();
-	}
+        EndGamePanel.SetActive(false);
+
+    }
 	
 	// Update is called once per frame
 	void Update ()

@@ -39,10 +39,13 @@ public class AvatarController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-        MoveAvatarSideWays();
-        ManageSpeed();
-        Globals.Speed = speed;
-	    Globals.Distance += speed/Time.deltaTime;
+        if (Globals.GameState == GameState.Playing)
+        {
+            MoveAvatarSideWays();
+            ManageSpeed();
+            Globals.Speed = speed;
+            Globals.Distance += speed / Time.deltaTime;
+        }
 
 	}
 
@@ -120,10 +123,11 @@ public class AvatarController : MonoBehaviour
             {
                 PackageSlot[i].ActivatePackage(PackageSlot[i], other.gameObject);
                 Globals.PackageSlotIsUsed[i] = true;
+
                 ObjectController otherObject = other.GetComponent<ObjectController>();
+                //otherObject.HideChildObject();
                 Debug.Log(otherObject);
-                if (otherObject.ChildObject != null)// Disable package on the ground until respawn
-                    otherObject.ChildObject.SetActive(false);
+
                 return;
             }
         }
