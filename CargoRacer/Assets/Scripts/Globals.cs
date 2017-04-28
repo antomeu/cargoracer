@@ -1,7 +1,7 @@
 ﻿public static class Globals
 {
     //Variables
-    public static float Lives;
+    public static int Lives;
     public static float Speed;
     public static bool[] PackageSlotIsUsed = new bool[3];
 
@@ -11,7 +11,7 @@
 
 
     //Constants
-    public static float MaximumLives = 3;
+    public static int MaximumLives = 3;
     public static float NominalSpeed = 40f;
     public static float ClippingDistance = 400f;
     
@@ -19,8 +19,8 @@
     public static void Reset()
     {
         Lives = MaximumLives;
-        foreach (bool UsedSlot in PackageSlotIsUsed)
-        { UsedSlot.Equals(false); }
+        for (int i = 0; i <= PackageSlotIsUsed.Length - 1; i++)
+        { PackageSlotIsUsed[i] = false; }
 
         GameState = GameState.Playing;
         Distance = 0;

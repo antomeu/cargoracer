@@ -3,23 +3,25 @@
 public class ObjectController : MonoBehaviour {
     public ObjectType ObjectType;
     public GameObject ChildObject;
-	// Use this for initialization
+    
 	void Start () {
 		
 	}
 
-    // Update is called once per frame
     void FixedUpdate() {
-        MoveObject();
-        CullObject();
+        if (Globals.GameState == GameState.Playing)
+        {
+            MoveObject();
+            CullObject();
+        }
     }
 
     private void MoveObject()
     {
         if (ObjectType == ObjectType.OncomingVehicle)
-            transform.position += ( 5 - 9/transform.position.x  + Globals.Speed) * Time.deltaTime * Vector3.back;
+            transform.position += ( 5   + Globals.Speed) * Time.deltaTime * Vector3.back;
         else if (ObjectType == ObjectType.SameLaneVehicle)
-            transform.position += (-5 - 9/transform.position.x  + Globals.Speed) * Time.deltaTime * Vector3.back;
+            transform.position += (-5   + Globals.Speed) * Time.deltaTime * Vector3.back;
         else
             transform.position += Globals.Speed * Time.deltaTime * Vector3.back;
     }
@@ -29,9 +31,9 @@ public class ObjectController : MonoBehaviour {
         if (transform.position.z <= -60f)
         {
             transform.position += Globals.ClippingDistance * Vector3.forward;
-            if (ObjectType == ObjectType.BonusBoost || ObjectType == ObjectType.Package || ObjectType == ObjectType.PackageDrop)
+            if (ObjectType == ObjectType.BonusBoost || ObjectType == ObjectType.Package || ObjectType == ObjectType.PackageDrop) //Reposition packages and drops randomly on a different lane
             {
-                transform.position = new Vector3((Mathf.Ceil(18 * Random.value) - 9f), transform.position.y, transform.position.z);
+                transform.position = new Vector3((Mathf.Floor(3.99f * Random.value)*6 - 9f), transform.position.y, transform.position.z); //random includes 0 and 1, so needs to be reduced a bit to exlude floor of 4 (which would be 4)
                 if (ChildObject != null || !ChildObject.activeSelf)
                     ChildObject.SetActive(true);
             }

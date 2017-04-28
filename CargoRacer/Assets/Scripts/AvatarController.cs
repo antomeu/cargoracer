@@ -25,7 +25,6 @@ public class AvatarController : MonoBehaviour
     
 
 
-    // Use this for initialization
     void Start () {
         for (int i = 0; i <= 3; i++)
         {
@@ -36,7 +35,6 @@ public class AvatarController : MonoBehaviour
         transform.position = LaneCoordinates[currentLane] * Vector3.right;
     }
 	
-	// Update is called once per frame
 	void Update ()
 	{
         if (Globals.GameState == GameState.Playing)
@@ -66,7 +64,7 @@ public class AvatarController : MonoBehaviour
         if (Math.Abs(transform.position.x - LaneCoordinates[currentLane]) > 0.1f)
         {
             var damping = Mathf.Abs(transform.position.x - LaneCoordinates[currentLane])/LaneWidth;
-            transform.position += (movingDirection * LaneChangingSpeed * Time.deltaTime) * damping * Vector3.right;
+            transform.position += (Mathf.Sign(LaneCoordinates[currentLane] - transform.position.x ) * LaneChangingSpeed * Time.deltaTime) * damping * Vector3.right;
             transform.rotation = Quaternion.Euler(0,movingDirection * damping * 15f ,0);
         }
         else
@@ -97,13 +95,12 @@ public class AvatarController : MonoBehaviour
         if (otherObjectType == ObjectType.SameLaneVehicle)
         {
             speed = 15f;
-            Globals.Lives--;
-            
+            Globals.Lives -= 1;
         }
         else if (otherObjectType == ObjectType.OncomingVehicle)
         {
             speed = 5f;
-            Globals.Lives--;
+            Globals.Lives -= 1;
         }
         else if (otherObjectType == ObjectType.BonusBoost)
             speed = 80f;
@@ -124,9 +121,8 @@ public class AvatarController : MonoBehaviour
                 PackageSlot[i].ActivatePackage(PackageSlot[i], other.gameObject);
                 Globals.PackageSlotIsUsed[i] = true;
 
-                ObjectController otherObject = other.GetComponent<ObjectController>();
-                //otherObject.HideChildObject();
-                Debug.Log(otherObject);
+                ObjectController otherObject = other.transform.parent.GetComponent<ObjectController>();
+                otherObject.HideChildObject();
 
                 return;
             }

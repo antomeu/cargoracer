@@ -5,16 +5,19 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    public Text NetworkDebugData;
+
     #region Set in Unity
     public Text DistanceText;
     public Text PackagesDeliveredText;
+    public Text EndGameScore;
+    
     public Image LivesFillImage;
     public Image[] PackageImages = new Image[3];
     public GameObject EndGamePanel;
     #endregion
     private float totalLives;
 
-    // Use this for initialization
     void Start () {
         totalLives = Globals.Lives;
         UpdateLivesUI();
@@ -22,24 +25,24 @@ public class UIController : MonoBehaviour
 
     }
 	
-	// Update is called once per frame
 	void Update ()
 	{
 	    DistanceText.text = Mathf.CeilToInt(Globals.Distance / 10000f).ToString();
         PackagesDeliveredText.text = "DELIVERIES: " + Globals.PackagesDelivered.ToString();
-        UpdateLivesUI();
-        UpdatePackages();
+        UpdateUI();
     }
 
     public void UpdateUI()
     {
         PackagesDeliveredText.text = "DELIVERIES: " + Globals.PackagesDelivered.ToString();
         UpdateLivesUI();
+        UpdatePackages();
     }
 
     public void UpdateLivesUI()
     {
-        LivesFillImage.fillAmount = Globals.Lives / totalLives;
+        LivesFillImage.fillAmount = (float) Globals.Lives / (float) Globals.MaximumLives;
+        
     }
 
     public void UpdatePackages()

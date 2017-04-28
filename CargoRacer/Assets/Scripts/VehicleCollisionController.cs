@@ -25,7 +25,7 @@ public class VehicleCollisionController : MonoBehaviour
     {
 
         
-        if (VehicleRigidbody != null)
+        if (VehicleRigidbody != null && Globals.GameState == GameState.Playing)
         {
             //Debug.Log(other.gameObject);
             if (other.name == "Player")

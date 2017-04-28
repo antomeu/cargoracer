@@ -21,7 +21,7 @@ public class PackageSlotController : MonoBehaviour {
     public void ActivatePackage(PackageSlotController packageSlot, GameObject PickedUpPackage)
     {
         SlotAvailable = false;
-        Debug.Log(PickedUpPackage.transform.parent.name[PickedUpPackage.transform.parent.name.Length - 1] -1 );
+        //Debug.Log(PickedUpPackage.transform.parent.name[PickedUpPackage.transform.parent.name.Length - 1] -1 );
         packageSlot.Package[Int32.Parse(PickedUpPackage.transform.parent.name[PickedUpPackage.transform.parent.name.Length - 1].ToString()) - 1 ].SetActive(true);
     }
 
