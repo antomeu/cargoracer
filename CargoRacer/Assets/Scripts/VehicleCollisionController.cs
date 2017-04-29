@@ -11,7 +11,7 @@ public class VehicleCollisionController : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-        if (transform.position.y <= -10)
+        if (transform.position.y <= -10 && Globals.GameState == GameState.Playing)
         {
             VehicleRigidbody.isKinematic = true;
             VehicleRigidbody.useGravity = false;

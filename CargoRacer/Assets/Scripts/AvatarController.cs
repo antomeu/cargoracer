@@ -18,6 +18,7 @@ public class AvatarController : MonoBehaviour
     public ParticleSystem ParticleDropOff;
     public ParticleSystem ParticleBoost;
 
+    public AudioManager AudioManager;
 
     #endregion
 
@@ -113,25 +114,37 @@ public class AvatarController : MonoBehaviour
         if (otherObjectType == ObjectType.SameLaneVehicle)
         {
             speed = 15f;
-            Globals.Lives -= 1;
-            ParticleCollision.Play();
+            CrashIntoTraffic();
         }
         else if (otherObjectType == ObjectType.OncomingVehicle)
         {
             speed = 5f;
-            Globals.Lives -= 1;
-            ParticleCollision.Play();
+            CrashIntoTraffic();
         }
         else if (otherObjectType == ObjectType.BonusBoost)
         {
             speed = 80f;
             ParticleBoost.Play();
+            AudioManager.Boost.Play();
         }
         else if (otherObjectType == ObjectType.Package)
+        {
             PickPackageUp(other);
+        }
         else if (otherObjectType == ObjectType.PackageDrop)
+        {
             DropPackageOff(other);
+        }
 
+    }
+
+    void CrashIntoTraffic()
+    {
+        Globals.Lives -= 1;
+        ParticleCollision.Play();
+        AudioManager.Crash.Play();
+        if (Globals.Lives <= 0)
+            AudioManager.FinalCrash.Play();
     }
 
     void PickPackageUp(Collider other)
@@ -146,6 +159,8 @@ public class AvatarController : MonoBehaviour
                 ParticlePickUp.transform.position = PackageSlot[i].transform.position;
                 ParticlePickUp.Play();
 
+                AudioManager.PickUp.Play();
+
                 ObjectController otherObject = other.transform.parent.GetComponent<ObjectController>();
                 otherObject.HideChildObject();
 
@@ -155,7 +170,7 @@ public class AvatarController : MonoBehaviour
 
         if (!PackageSlot[PackageSlot.Length-1].SlotAvailable)//if full, do not pick up and show message
         {
-            return;
+            AudioManager.CannotPickUp.Play();
         }
 
     }
@@ -173,6 +188,7 @@ public class AvatarController : MonoBehaviour
                 Globals.PackagesDelivered++;
                 ParticleDropOff.transform.position = PackageSlot[i].transform.position;
                 ParticleDropOff.Play();
+                AudioManager.DropOff.Play();
                 return;
             }
         }
