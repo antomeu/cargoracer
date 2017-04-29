@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using UnityEngine;
 
 public class AvatarController : MonoBehaviour
@@ -14,6 +13,12 @@ public class AvatarController : MonoBehaviour
 
     public PackageSlotController[] PackageSlot = new PackageSlotController[3];
 
+    public ParticleSystem ParticleCollision;
+    public ParticleSystem ParticlePickUp;
+    public ParticleSystem ParticleDropOff;
+    public ParticleSystem ParticleBoost;
+
+
     #endregion
 
     public float speed;
@@ -21,41 +26,54 @@ public class AvatarController : MonoBehaviour
     private int currentLane = 2;
     private int movingDirection;
     private bool hasReachedLane;
+    private bool isButtonLeftPressed;
+    private bool isButtonRightPressed;
 
-    
 
 
-    void Start () {
+    void Start() {
         for (int i = 0; i <= 3; i++)
         {
-            LaneCoordinates[i] = LaneWidth * (i - 3/2) - 3; //LaneWidth /2*((i - 2) + 1);
+            LaneCoordinates[i] = LaneWidth * (i - 3 / 2) - 3; //LaneWidth /2*((i - 2) + 1);
         }
         speed = 20f;
         currentLane = 2;
         transform.position = LaneCoordinates[currentLane] * Vector3.right;
     }
-	
-	void Update ()
-	{
+
+    void Update()
+    {
         if (Globals.GameState == GameState.Playing)
         {
             MoveAvatarSideWays();
+            isButtonLeftPressed = false;
+            isButtonRightPressed = false;
             ManageSpeed();
             Globals.Speed = speed;
             Globals.Distance += speed / Time.deltaTime;
         }
 
-	}
+    }
+
+    public void ButtonLeftIsDown()
+    {
+        isButtonLeftPressed = true;
+    }
+
+    public void ButtonRightIsDown()
+    {
+        isButtonRightPressed = true;
+    }
 
     void MoveAvatarSideWays()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && currentLane > 0)
+        if ((Input.GetKeyDown(KeyCode.LeftArrow) || isButtonLeftPressed) && currentLane > 0)
         {
             movingDirection = -1;
             currentLane += movingDirection;
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && currentLane < LaneCoordinates.Length - 1)
+        if ((Input.GetKeyDown(KeyCode.RightArrow) || isButtonRightPressed)&& currentLane < LaneCoordinates.Length - 1)
         {
             movingDirection = 1;
             currentLane += movingDirection;
@@ -96,14 +114,19 @@ public class AvatarController : MonoBehaviour
         {
             speed = 15f;
             Globals.Lives -= 1;
+            ParticleCollision.Play();
         }
         else if (otherObjectType == ObjectType.OncomingVehicle)
         {
             speed = 5f;
             Globals.Lives -= 1;
+            ParticleCollision.Play();
         }
         else if (otherObjectType == ObjectType.BonusBoost)
+        {
             speed = 80f;
+            ParticleBoost.Play();
+        }
         else if (otherObjectType == ObjectType.Package)
             PickPackageUp(other);
         else if (otherObjectType == ObjectType.PackageDrop)
@@ -120,6 +143,8 @@ public class AvatarController : MonoBehaviour
             {
                 PackageSlot[i].ActivatePackage(PackageSlot[i], other.gameObject);
                 Globals.PackageSlotIsUsed[i] = true;
+                ParticlePickUp.transform.position = PackageSlot[i].transform.position;
+                ParticlePickUp.Play();
 
                 ObjectController otherObject = other.transform.parent.GetComponent<ObjectController>();
                 otherObject.HideChildObject();
@@ -146,6 +171,8 @@ public class AvatarController : MonoBehaviour
                 PackageSlot[i].DeactivatePackages();
                 Globals.PackageSlotIsUsed[i] = false;
                 Globals.PackagesDelivered++;
+                ParticleDropOff.transform.position = PackageSlot[i].transform.position;
+                ParticleDropOff.Play();
                 return;
             }
         }

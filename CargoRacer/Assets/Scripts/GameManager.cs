@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public AvatarController AvatarController;
     public UIController UIController;
-    public APIManager APIManager;
+    //public APIManager APIManager;
+    public GameObject StartGamePanel;
 
 	void Start () {
         Globals.Reset();
@@ -27,19 +28,23 @@ public class GameManager : MonoBehaviour {
         Globals.Speed = 0;
         Globals.GameState = GameState.End;
         UIController.EndGamePanel.SetActive(true);
-        UIController.EndGameScore.text = "YOUR SCORE IS:\n" + Globals.PackagesDelivered.ToString() + "\n";
+        //UIController.EndGameScore.text = "YOUR SCORE IS:\n" + Globals.PackagesDelivered.ToString() + "\n";
         SendScore();
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Globals.Reset();
-            SceneManager.LoadScene(0, LoadSceneMode.Single);
+            Restart();
         }
-        
     }
+    public void Restart()
+    {
 
+        Globals.Reset();
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        StartGamePanel.SetActive(true);
+    }
     void SendScore()
     {
-        APIManager.StartCoroutine("Start");
+        //APIManager.StartCoroutine("Start");
         //UIController.NetworkDebugData.text = APIManager.Response;
         
     }

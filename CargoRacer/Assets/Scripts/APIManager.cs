@@ -1,24 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Conclify;
+using Conclify.Game;
 using TinyJSON;
 
 public class APIManager : MonoBehaviour
 {
-    public string url = "";
-    public string Response;
-    
-    IEnumerator Start()
+
+
+    private ConclifyApi GetApi()
     {
-        WWW www = new WWW(url);
-        yield return www;
-        var data = JSON.Load(www.text);
-        foreach (var pair in data as ProxyObject)
-        {
-            if (string.Equals(pair.Key, "isSuccess"))
-                Debug.Log(bool.Parse(data["isSuccess"])); //pair.Key + " = " + pair.Value);
-        }
-        
-        Response = www.text;
+        ConclifyApi api = GetComponent<ConclifyApi>();
+        return api;
     }
+
+    
+
 }

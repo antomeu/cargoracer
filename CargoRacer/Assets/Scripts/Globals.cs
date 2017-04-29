@@ -9,15 +9,19 @@
     public static float Distance;
     public static int PackagesDelivered;
 
+    public static string PlayerName;
+
+
 
     //Constants
-    public static int MaximumLives = 3;
+    public static int MaximumLives = 4;
     public static float NominalSpeed = 40f;
     public static float ClippingDistance = 400f;
     
     
     public static void Reset()
     {
+        
         Lives = MaximumLives;
         for (int i = 0; i <= PackageSlotIsUsed.Length - 1; i++)
         { PackageSlotIsUsed[i] = false; }
