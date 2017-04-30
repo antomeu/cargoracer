@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour {
     public AudioSource FinalCrash;
     public AudioSource Boost;
     public AudioSource CannotPickUp;
+    public AudioSource TurnSkid;
 
     public float NormalPitch = 0.44f;
     // Use this for initialization

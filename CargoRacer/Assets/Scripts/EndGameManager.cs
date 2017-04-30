@@ -1,52 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 using Conclify;
 using Conclify.Game;
-using TinyJSON;
 
-public class EndGameManager : MonoBehaviour {
+public class EndGameManager : MonoBehaviour
+{
     //public InputField InputName;
     public Button ButtonRestart; // Show when player name is submitter
     public LeaderBoardsManager LeaderBoardManager;
     public ConclifyApi api;
 
 	void Start ()
-    {
-        //ButtonRestart.enabled = false;
-        GetPlayersScore();
-    }
+	{
+		api.GameUpdated += HandleGameUpdated;
+		HandleGameUpdated();
+		api.RequestGameScoresGet();
+	}
 	
     public void SendName()
     {
-        //ButtonRestart.enabled = true;
+		api.RequestPlayerPatch(Globals.PlayerName);
     }
-    
 
-    void GetPlayersScore()
-    {
-        
-        api.RequestPlayerPost();
-        api.RequestPlayerPatch(Globals.PlayerName);
-        api.RequestPlayerScorePost(Globals.PackagesDelivered);
+	public void SetPlayerScore()
+	{
+		api.RequestPlayerScorePost(Globals.PackagesDelivered);
+		api.RequestGameScoresGet();
+	}
 
-        Debug.Log(api.Player.FirstName);
+	private void HandleGameUpdated()
+	{
+		if(!api.Game.Scores.Any())
+			return;
 
-        int index = 1;
-        foreach (ConclifyApiGameScore gameScore in api.Game.Scores)
-        {
-            string rank = gameScore.Rank; 
-            string name = gameScore.Name;
-            string score = gameScore.Score;
-            Debug.Log(gameScore);
-            if (index <= LeaderBoardManager.PlayerScoreManager.Length)// Only display the top of the board
-            {
-                LeaderBoardManager.PlayerScoreManager[index].SetPlayerInfo(rank, name, score);
-            }
-            index++;
-
-        }
-    }
+		int index = 0;
+		foreach(ConclifyApiGameScore gameScore in api.Game.Scores)
+		{
+			if(index < LeaderBoardManager.PlayerScoreManager.Length)// Only display the top of the board
+			{
+				LeaderBoardManager.PlayerScoreManager[index].SetPlayerInfo(gameScore.Rank, gameScore.Name, gameScore.Score);
+			}
+			index++;
+		}
+	}
 }

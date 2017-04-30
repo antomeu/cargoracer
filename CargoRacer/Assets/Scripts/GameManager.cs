@@ -27,9 +27,12 @@ public class GameManager : MonoBehaviour {
 
         Globals.Speed = 0;
         Globals.GameState = GameState.End;
-        UIController.EndGamePanel.SetActive(true);
-        //UIController.EndGameScore.text = "YOUR SCORE IS:\n" + Globals.PackagesDelivered.ToString() + "\n";
-        SendScore();
+		
+	    UIController.EndGamePanel.GetComponent<EndGameManager>().SetPlayerScore();
+		UIController.EndGamePanel.SetActive(true);
+
+		//UIController.EndGameScore.text = "YOUR SCORE IS:\n" + Globals.PackagesDelivered.ToString() + "\n";
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Restart();

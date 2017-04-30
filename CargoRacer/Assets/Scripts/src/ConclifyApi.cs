@@ -99,6 +99,41 @@ namespace Conclify
 		public ConclifyApiGame Game
 		{ get { return game; } }
 
+		//Player Methods
+		//---------------------------------------------------------------------
+
+		/// <summary>
+		/// Clears all saved player information
+		/// </summary>
+		public void ForgetPlayer()
+		{
+			//Clear All Player Fields
+			player.Id = null;
+			player.FirstName = null;
+			player.LastName = null;
+			player.EmailAddress = null;
+			player.Country = null;
+			player.DeviceId = null;
+			player.Platform = null;
+			player.Tokens = 0;
+			player.TokensToThreshold = 0;
+
+			//Save Player
+			player.Save();
+		}
+
+		//Awake Methods
+		//---------------------------------------------------------------------
+
+	    void Awake()
+		{
+			//Attempt to Load Player Data, Otherwise Create New Player
+			player = (ConclifyApiPlayer.Load() ?? new ConclifyApiPlayer());
+
+			//Attempt to Load Game Data, Otherwise Create New Game
+			game = (ConclifyApiGame.Load() ?? new ConclifyApiGame());
+		}
+
 		//Start Methods
 		//---------------------------------------------------------------------
 
@@ -107,12 +142,6 @@ namespace Conclify
 		/// </summary>
 		void Start()
 	    {
-			//Attempt to Load Player Data, Otherwise Create New Player
-			player = (ConclifyApiPlayer.Load() ?? new ConclifyApiPlayer());
-
-			//Attempt to Load Game Data, Otherwise Create New Game
-			game = (ConclifyApiGame.Load() ?? new ConclifyApiGame());
-
 			//Queue Initial Player Post
 			RequestPlayerPost();
 
@@ -173,7 +202,7 @@ namespace Conclify
 			if(requestQueue.Any())
 			{
 				//Pop Next Request for Processing
-				currentRequest = requestQueue.FirstOrDefault(request => request.CanExecute);
+				currentRequest = requestQueue.Dequeue();
 			}
 		}
 

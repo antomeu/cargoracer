@@ -17,7 +17,8 @@ public class AvatarController : MonoBehaviour
     public ParticleSystem ParticlePickUp;
     public ParticleSystem ParticleDropOff;
     public ParticleSystem ParticleBoost;
-
+    public ParticleSystem ParticleTurnLeft;
+    public ParticleSystem ParticleTurnRight;
     public AudioManager AudioManager;
 
     #endregion
@@ -72,12 +73,16 @@ public class AvatarController : MonoBehaviour
         {
             movingDirection = -1;
             currentLane += movingDirection;
+            ParticleTurnLeft.Play();
+            AudioManager.TurnSkid.Play();
         }
 
         if ((Input.GetKeyDown(KeyCode.RightArrow) || isButtonRightPressed)&& currentLane < LaneCoordinates.Length - 1)
         {
             movingDirection = 1;
             currentLane += movingDirection;
+            ParticleTurnRight.Play();
+            AudioManager.TurnSkid.Play();
         }
 
         if (Math.Abs(transform.position.x - LaneCoordinates[currentLane]) > 0.1f)

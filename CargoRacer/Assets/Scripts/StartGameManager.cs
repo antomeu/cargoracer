@@ -13,9 +13,9 @@ public class StartGameManager : MonoBehaviour {
 	
     public void StartGame()
     {
-        if (TextPlayerName.text != string.Empty)
+        if (true || TextPlayerName.text != string.Empty)//Temporary
         {
-            //Globals.PlayerName = TextPlayerName.text;
+            Globals.PlayerName = TextPlayerName.text;
             MovingWorld.SetActive(true);
             transform.gameObject.SetActive(false);
         }
