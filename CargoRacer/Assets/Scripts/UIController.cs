@@ -26,7 +26,7 @@ public class UIController : MonoBehaviour
 	
 	void Update ()
 	{
-	    DistanceText.text = (Globals.Distance / 10000f).ToString("F2") + "Km";
+	    DistanceText.text = (Globals.Distance / 10000000f).ToString("F2") + "Km";
         PackagesDeliveredText.text = "DELIVERIES: " + Globals.PackagesDelivered.ToString() ;
         UpdateUI();
     }

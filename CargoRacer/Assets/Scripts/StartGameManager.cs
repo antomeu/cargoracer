@@ -12,6 +12,8 @@ public class StartGameManager : MonoBehaviour {
     public Button ForgetPlayerButton;
     public Button StartButton;
     public ConclifyApi Api;
+
+    private bool PlayerExistsInApi;
 	
 	void Start () {
         MovingWorld.SetActive(false);
@@ -26,18 +28,20 @@ public class StartGameManager : MonoBehaviour {
             InputFieldName.gameObject.SetActive(true);
             ForgetPlayerButton.gameObject.SetActive(false);
             StartButton.gameObject.SetActive(false);
+            PlayerExistsInApi = false;
         }
         else //If player exists
         {
             InputFieldName.gameObject.SetActive(false);
             ForgetPlayerButton.gameObject.SetActive(true);
             StartButton.gameObject.SetActive(true);
+            PlayerExistsInApi = true;
         }
     }
 	
     public void StartGame()// triggered if start button is pressed (button in the background)
     {
-        if (TextPlayerName.text != string.Empty)//Temporary
+        if (PlayerExistsInApi || TextPlayerName.text != string.Empty)//Temporary
         {
             Globals.PlayerName = TextPlayerName.text;
             MovingWorld.SetActive(true);
