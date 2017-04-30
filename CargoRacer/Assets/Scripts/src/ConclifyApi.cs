@@ -249,6 +249,10 @@ namespace Conclify
 		    string patchDeviceId = (string.IsNullOrEmpty(deviceId) ? player.DeviceId : deviceId);
 		    string patchPlatform = (string.IsNullOrEmpty(platform) ? player.Platform : platform);
 
+			//Check for Player
+			if(string.IsNullOrEmpty(player.Id))
+				RequestPlayerPost();
+
 			//Queue Player Patch Request
 			requestQueue.Enqueue(new ConclifyApiRequestPlayerPatch(this, patchFirstName, patchLastName, patchEmailAddress, patchCountry, patchDeviceId, patchPlatform));
 	    }
