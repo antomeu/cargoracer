@@ -10,7 +10,6 @@ public class UIController : MonoBehaviour
     #region Set in Unity
     public Text DistanceText;
     public Text PackagesDeliveredText;
-    public Text EndGameScore;
     
     public Image LivesFillImage;
     public Image[] PackageImages = new Image[3];
