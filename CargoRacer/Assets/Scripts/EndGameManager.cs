@@ -28,7 +28,8 @@ public class EndGameManager : MonoBehaviour
 
 	public void SetPlayerScore()
 	{
-		api.RequestPlayerScorePost(Globals.PackagesDelivered);
+        api.RequestPlayerPatch(Globals.PlayerName);
+        api.RequestPlayerScorePost(Globals.PackagesDelivered);
 		api.RequestGameScoresGet();
 	}
 

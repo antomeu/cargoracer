@@ -21,6 +21,7 @@ public class AvatarController : MonoBehaviour
     public ParticleSystem ParticleTurnRight;
     public AudioManager AudioManager;
 
+    public UIController UIController; 
     #endregion
 
     public float speed;
@@ -165,6 +166,7 @@ public class AvatarController : MonoBehaviour
                 ParticlePickUp.Play();
 
                 AudioManager.PickUp.Play();
+                
 
                 ObjectController otherObject = other.transform.parent.GetComponent<ObjectController>();
                 otherObject.HideChildObject();

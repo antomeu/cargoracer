@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 
 		//UIController.EndGameScore.text = "YOUR SCORE IS:\n" + Globals.PackagesDelivered.ToString() + "\n";
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)) // for PC
         {
             Restart();
         }

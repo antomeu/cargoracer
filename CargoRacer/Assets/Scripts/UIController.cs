@@ -34,7 +34,7 @@ public class UIController : MonoBehaviour
 
     public void UpdateUI()
     {
-        PackagesDeliveredText.text = "DELIVERIES: " + Globals.PackagesDelivered.ToString();
+        
         UpdateLivesUI();
         UpdatePackages();
     }
