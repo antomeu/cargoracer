@@ -203,6 +203,10 @@ namespace Conclify
 			{
 				//Pop Next Request for Processing
 				currentRequest = requestQueue.Dequeue();
+				
+				//Check for Valid Request
+				if(!currentRequest.CanExecute)
+					currentRequest = null;
 			}
 		}
 

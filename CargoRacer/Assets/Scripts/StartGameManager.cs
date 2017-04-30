@@ -37,7 +37,7 @@ public class StartGameManager : MonoBehaviour {
 	
     public void StartGame()// triggered if start button is pressed (button in the background)
     {
-        if (true || TextPlayerName.text != string.Empty)//Temporary
+        if (TextPlayerName.text != string.Empty)//Temporary
         {
             Globals.PlayerName = TextPlayerName.text;
             MovingWorld.SetActive(true);
