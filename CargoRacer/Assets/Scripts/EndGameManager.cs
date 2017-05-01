@@ -29,9 +29,9 @@ public class EndGameManager : MonoBehaviour
 
 	public void SetPlayerScore()
 	{
-        if (InputFieldEmail.textComponent.text != string.Empty || string.IsNullOrEmpty(Api.Player.EmailAddress))
+        if (InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress))
         {
-            Debug.Log("Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
+            Debug.Log("id"+ Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
             InputFieldEmail.textComponent.text = Api.Player.EmailAddress;
             Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
             Api.RequestPlayerScorePost(Globals.PackagesDelivered);
