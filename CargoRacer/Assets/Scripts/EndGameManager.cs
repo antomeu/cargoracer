@@ -24,7 +24,9 @@ public class EndGameManager : MonoBehaviour
         HandleGameUpdated();
         Api.PlayerUpdated += PlayerUpdated;
         Api.RequestGameScoresGet();
-	}
+        Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
+        SetPlayerScore();
+    }
 
     void PlayerUpdated()
     {
@@ -36,15 +38,14 @@ public class EndGameManager : MonoBehaviour
 	{
         if (InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress))
         {
-            Debug.Log("id"+ Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
-            InputFieldEmail.textComponent.text = Api.Player.EmailAddress;
+            //InputFieldEmail.textComponent.text = Api.Player.EmailAddress; // if player wants to resubmit
+            InputFieldEmail.gameObject.SetActive(false);
             Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
             Api.RequestPlayerScorePost(Globals.PackagesDelivered);
             HandleGameUpdated();
             Api.RequestGameScoresGet();
             ButtonRestart.enabled = true;
             TextRestart.enabled = true;
-            PlayerUpdated();
         }
 	}
 

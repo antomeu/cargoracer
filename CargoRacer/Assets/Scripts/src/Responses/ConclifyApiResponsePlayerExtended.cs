@@ -9,6 +9,7 @@
 // Since:		29/04/2017
 // ================================================================================================
 
+using System;
 using Conclify.Game;
 using TinyJSON;
 
@@ -100,12 +101,18 @@ namespace Conclify.Responses
 			: base(jsonResponse, gameType)
 		{
 			//Retrieve Response Fields
-			platform = jsonResponse[Property_Platform];
-			deviceId = jsonResponse[Property_DeviceId];
-			firstName = jsonResponse[Property_FirstName];
-			lastName = jsonResponse[Property_LastName];
-			emailAddress = jsonResponse[Property_EmailAddress];
-			country = jsonResponse[Property_Country];
+			try { platform = jsonResponse[Property_Platform]; }
+			catch(Exception) { }
+			try{ deviceId = jsonResponse[Property_DeviceId]; }
+			catch(Exception) { }
+			try{ firstName = jsonResponse[Property_FirstName]; }
+			catch(Exception) { }
+			try { lastName = jsonResponse[Property_LastName]; }
+			catch(Exception) { }
+			try { emailAddress = jsonResponse[Property_EmailAddress]; }
+			catch(Exception) { }
+			try { country = jsonResponse[Property_Country]; }
+			catch(Exception) { }
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour {
         Globals.GameState = GameState.End;
 
         UIController.EndGamePanel.SetActive(true);
-        UIController.EndGamePanel.GetComponent<EndGameManager>().SetPlayerScore();
+        //UIController.EndGamePanel.GetComponent<EndGameManager>().SetPlayerScore();
 		
 
 		//UIController.EndGameScore.text = "YOUR SCORE IS:\n" + Globals.PackagesDelivered.ToString() + "\n";

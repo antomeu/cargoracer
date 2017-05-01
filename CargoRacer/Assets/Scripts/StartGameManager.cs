@@ -33,7 +33,7 @@ public class StartGameManager : MonoBehaviour {
         }
         else //If player exists
         {
-            Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
+            //Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
             InputFieldName.gameObject.SetActive(false);
             ForgetPlayerButton.gameObject.SetActive(true);
             StartButton.gameObject.SetActive(true);
