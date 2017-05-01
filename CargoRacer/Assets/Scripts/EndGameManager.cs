@@ -21,13 +21,18 @@ public class EndGameManager : MonoBehaviour
         ButtonRestart.enabled = false;
         TextRestart.enabled = false;
         Api.GameUpdated += HandleGameUpdated;
-		HandleGameUpdated();
-		Api.RequestGameScoresGet();
+        HandleGameUpdated();
+        Api.PlayerUpdated += PlayerUpdated;
+        Api.RequestGameScoresGet();
 	}
-	
+
+    void PlayerUpdated()
+    {
+        Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
+    }
 
 
-	public void SetPlayerScore()
+    public void SetPlayerScore()
 	{
         if (InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress))
         {
@@ -39,6 +44,7 @@ public class EndGameManager : MonoBehaviour
             Api.RequestGameScoresGet();
             ButtonRestart.enabled = true;
             TextRestart.enabled = true;
+            PlayerUpdated();
         }
 	}
 
