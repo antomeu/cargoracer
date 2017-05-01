@@ -11,26 +11,33 @@ public class EndGameManager : MonoBehaviour
 {
     //public InputField InputName;
     public Button ButtonRestart; // Show when player name is submitter
+    public Text TextRestart;
     public LeaderBoardsManager LeaderBoardManager;
+    public InputField InputFieldEmail;
     public ConclifyApi api;
 
 	void Start ()
 	{
-		api.GameUpdated += HandleGameUpdated;
+        ButtonRestart.enabled = false;
+        TextRestart.enabled = false;
+        api.GameUpdated += HandleGameUpdated;
 		HandleGameUpdated();
 		api.RequestGameScoresGet();
 	}
 	
-    public void SendName()
-    {
-		api.RequestPlayerPatch(Globals.PlayerName);
-    }
+
 
 	public void SetPlayerScore()
 	{
-        api.RequestPlayerPatch(Globals.PlayerName);
-        api.RequestPlayerScorePost(Globals.PackagesDelivered);
-		api.RequestGameScoresGet();
+        if (InputFieldEmail.text != string.Empty)
+        {
+            api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.text);
+            api.RequestPlayerScorePost(Globals.PackagesDelivered);
+            HandleGameUpdated();
+            api.RequestGameScoresGet();
+            ButtonRestart.enabled = true;
+            TextRestart.enabled = true;
+        }
 	}
 
 	private void HandleGameUpdated()
