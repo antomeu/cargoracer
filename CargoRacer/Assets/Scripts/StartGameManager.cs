@@ -7,7 +7,8 @@ using Conclify.Game;
 
 public class StartGameManager : MonoBehaviour {
     public GameObject MovingWorld;
-    public Text TextPlayerName;
+    public Text TextEnteredPlayerName;
+    public Text TextWelcomeMessage;
     public InputField InputFieldName;
     public Button ForgetPlayerButton;
     public Button StartButton;
@@ -41,9 +42,9 @@ public class StartGameManager : MonoBehaviour {
 	
     public void StartGame()// triggered if start button is pressed (button in the background)
     {
-        if (PlayerExistsInApi || TextPlayerName.text != string.Empty)//Temporary
+        if (PlayerExistsInApi || !string.IsNullOrEmpty(TextEnteredPlayerName.text))
         {
-            Globals.PlayerName = TextPlayerName.text;
+            Globals.PlayerName = TextEnteredPlayerName.text;
             MovingWorld.SetActive(true);
             transform.gameObject.SetActive(false);
         }

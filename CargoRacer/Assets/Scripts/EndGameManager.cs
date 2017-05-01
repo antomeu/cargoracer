@@ -14,27 +14,29 @@ public class EndGameManager : MonoBehaviour
     public Text TextRestart;
     public LeaderBoardsManager LeaderBoardManager;
     public InputField InputFieldEmail;
-    public ConclifyApi api;
+    public ConclifyApi Api;
 
 	void Start ()
 	{
         ButtonRestart.enabled = false;
         TextRestart.enabled = false;
-        api.GameUpdated += HandleGameUpdated;
+        Api.GameUpdated += HandleGameUpdated;
 		HandleGameUpdated();
-		api.RequestGameScoresGet();
+		Api.RequestGameScoresGet();
 	}
 	
 
 
 	public void SetPlayerScore()
 	{
-        if (InputFieldEmail.text != string.Empty)
+        if (InputFieldEmail.textComponent.text != string.Empty || string.IsNullOrEmpty(Api.Player.EmailAddress))
         {
-            api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.text);
-            api.RequestPlayerScorePost(Globals.PackagesDelivered);
+            Debug.Log("Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
+            InputFieldEmail.textComponent.text = Api.Player.EmailAddress;
+            Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
+            Api.RequestPlayerScorePost(Globals.PackagesDelivered);
             HandleGameUpdated();
-            api.RequestGameScoresGet();
+            Api.RequestGameScoresGet();
             ButtonRestart.enabled = true;
             TextRestart.enabled = true;
         }
@@ -42,11 +44,11 @@ public class EndGameManager : MonoBehaviour
 
 	private void HandleGameUpdated()
 	{
-		if(!api.Game.Scores.Any())
+		if(!Api.Game.Scores.Any())
 			return;
 
 		int index = 0;
-		foreach(ConclifyApiGameScore gameScore in api.Game.Scores)
+		foreach(ConclifyApiGameScore gameScore in Api.Game.Scores)
 		{
 			if(index < LeaderBoardManager.PlayerScoreManager.Length)// Only display the top of the board
 			{
