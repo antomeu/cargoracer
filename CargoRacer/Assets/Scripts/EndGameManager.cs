@@ -36,38 +36,27 @@ public class EndGameManager : MonoBehaviour
 
     public void SetPlayerScore()
 	{
-        Debug.Log("Starting SetPlayerScore");
         if (InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress))
         {
             //InputFieldEmail.textComponent.text = Api.Player.EmailAddress; // if player wants to resubmit
             InputFieldEmail.gameObject.SetActive(false);
-
-            Debug.Log("Api.RequestPlayerPatch");
-
+            
             Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
-
-            Debug.Log("Api.RequestPlayerScorePost");
-
+            
             Api.RequestPlayerScorePost(Globals.PackagesDelivered);
-
-            Debug.Log("HandleGameUpdated");
-
+            
             HandleGameUpdated();
-
-            Debug.Log("Api.RequestGameScoresGet");
-
+            
             Api.RequestGameScoresGet();
             ButtonRestart.enabled = true;
             TextRestart.enabled = true;
         }
 
-        Debug.Log("Finishing SetPlayerScore");
 
     }
 
     private void HandleGameUpdated()
 	{
-        Debug.Log("Starting HandleGameUpdated");
 
         if (!Api.Game.Scores.Any())
 			return;
@@ -75,7 +64,6 @@ public class EndGameManager : MonoBehaviour
 		int index = 0;
 		foreach(ConclifyApiGameScore gameScore in Api.Game.Scores)
 		{
-            Debug.Log("foreach score in api");
 
             if (index < LeaderBoardManager.PlayerScoreManager.Length)// Only display the top of the board
 			{
@@ -83,8 +71,6 @@ public class EndGameManager : MonoBehaviour
 			}
 			index++;
 		}
-
-        Debug.Log("Finishing HandleGameUpdated");
 
     }
 }

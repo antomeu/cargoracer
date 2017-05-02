@@ -101,17 +101,41 @@ namespace Conclify.Responses
 			: base(jsonResponse, gameType)
 		{
 			//Retrieve Response Fields
-			try { platform = jsonResponse[Property_Platform]; }
+			try
+			{
+				if(jsonResponse[Property_Platform] != null)
+					platform = jsonResponse[Property_Platform];
+			}
 			catch(Exception) { }
-			try{ deviceId = jsonResponse[Property_DeviceId]; }
+			try
+			{
+				if(jsonResponse[Property_DeviceId] != null)
+					deviceId = jsonResponse[Property_DeviceId];
+			}
 			catch(Exception) { }
-			try{ firstName = jsonResponse[Property_FirstName]; }
+			try
+			{
+				if(jsonResponse[Property_FirstName] != null)
+					firstName = jsonResponse[Property_FirstName];
+			}
 			catch(Exception) { }
-			try { lastName = jsonResponse[Property_LastName]; }
+			try
+			{
+				if(jsonResponse[Property_LastName] != null)
+					lastName = jsonResponse[Property_LastName];
+			}
 			catch(Exception) { }
-			try { emailAddress = jsonResponse[Property_EmailAddress]; }
+			try
+			{
+				if(jsonResponse[Property_EmailAddress] != null)
+					emailAddress = jsonResponse[Property_EmailAddress];
+			}
 			catch(Exception) { }
-			try { country = jsonResponse[Property_Country]; }
+			try
+			{
+				if(jsonResponse[Property_Country] != null)
+					country = jsonResponse[Property_Country];
+			}
 			catch(Exception) { }
 		}
 	}
