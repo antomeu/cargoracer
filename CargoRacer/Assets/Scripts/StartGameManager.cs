@@ -26,18 +26,28 @@ public class StartGameManager : MonoBehaviour {
     {
         if (string.IsNullOrEmpty(Api.Player.Id))//If there is no player saved
         {
+            Debug.Log("Starting InterfaceInit if no player");
+
             InputFieldName.gameObject.SetActive(true);
             ForgetPlayerButton.gameObject.SetActive(false);
             StartButton.gameObject.SetActive(false);
             PlayerExistsInApi = false;
+
+            Debug.Log("Finishing InterfaceInit if no player");
+
         }
         else //If player exists
         {
+            Debug.Log("Starting InterfaceInit if yes player");
+
             //Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
             InputFieldName.gameObject.SetActive(false);
             ForgetPlayerButton.gameObject.SetActive(true);
             StartButton.gameObject.SetActive(true);
             PlayerExistsInApi = true;
+
+            Debug.Log("Finishing InterfaceInit if yes player");
+
         }
     }
 	
@@ -53,7 +63,11 @@ public class StartGameManager : MonoBehaviour {
 
     public void ForgetPlayer()
     {
+        Debug.Log("Starting Forget Player");
+
         Api.ForgetPlayer();
         InterfaceInit();
+
+        Debug.Log("Starting Forget Player");
     }
 }
