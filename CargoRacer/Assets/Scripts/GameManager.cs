@@ -21,7 +21,13 @@ public class GameManager : MonoBehaviour {
 	    {
 	        EndGame();
 	    }
-	}
+
+        if (Globals.PackagesDelivered >= 10)
+            Globals.Level = 2;
+        if (Globals.PackagesDelivered >= 20)
+            Globals.Level = 3;
+        
+    }
 
     void EndGame()
     {

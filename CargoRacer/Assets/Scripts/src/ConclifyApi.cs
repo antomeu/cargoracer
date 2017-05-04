@@ -9,9 +9,12 @@
 // Since:		29/04/2017
 // ================================================================================================
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Conclify.Game;
 using Conclify.Player;
 using Conclify.Requests;
@@ -42,9 +45,12 @@ namespace Conclify
 		//---------------------------------------------------------------------
 
 		/// <summary>API key to use when accessing the API</summary>
+		// ReSharper disable once FieldCanBeMadeReadOnly.Global
 	    public string ApiKey = null;
 
 		/// <summary>Game-type to determine properties present in responses</summary>
+		// ReSharper disable once FieldCanBeMadeReadOnly.Global
+		// ReSharper disable once ConvertToConstant.Global
 		public ConclifyApiGameTypes GameType = ConclifyApiGameTypes.TokenBased;
 
 		//Event Fields and Properties
@@ -78,6 +84,9 @@ namespace Conclify
 
 		/// <summary>Game information</summary>
 	    private ConclifyApiGame game = null;
+
+		/// <summary>Indicates if the script is running or not</summary>
+	    private bool running = false;
 
 		//Request Fields
 		//---------------------------------------------------------------------
@@ -153,9 +162,12 @@ namespace Conclify
 		/// Starts the coroutine update loop
 		/// </summary>
 	    IEnumerator CoStart()
-	    {
+		{
+			//Start Running
+			running = true;
+
 			//Loop to Yield Co-Update Coroutine
-		    while(true)
+		    while(running)
 			    yield return CoUpdate();
 	    }
 
@@ -210,6 +222,18 @@ namespace Conclify
 			}
 		}
 
+		//Destroy Method
+		//---------------------------------------------------------------------
+
+		/// <summary>
+		/// Performs clean-up of the API when the script is being destroyed
+		/// </summary>
+		void OnDestroy()
+	    {
+		    //Stop Co-Update
+		    running = false;
+	    }
+
 		//Request Methods
 		//---------------------------------------------------------------------
 
@@ -244,10 +268,14 @@ namespace Conclify
 		    //Determine Patch Fields
 		    string patchFirstName = (string.IsNullOrEmpty(firstName) ? player.FirstName : firstName);
 		    string patchLastName = (string.IsNullOrEmpty(lastName) ? player.LastName : lastName);
-		    string patchEmailAddress = (string.IsNullOrEmpty(emailAddress) ? player.EmailAddress : emailAddress);
+		    string patchEmailAddress = (string.IsNullOrEmpty(emailAddress) ? player.EmailAddress : (IsValidEmail(emailAddress) ? emailAddress : player.EmailAddress));
 		    string patchCountry = (string.IsNullOrEmpty(country) ? player.Country : country);
 		    string patchDeviceId = (string.IsNullOrEmpty(deviceId) ? player.DeviceId : deviceId);
 		    string patchPlatform = (string.IsNullOrEmpty(platform) ? player.Platform : platform);
+
+			//Re-Validate Patch Fields
+			if(string.IsNullOrEmpty(patchFirstName) && string.IsNullOrEmpty(patchLastName) && string.IsNullOrEmpty(patchEmailAddress) && string.IsNullOrEmpty(patchCountry) && string.IsNullOrEmpty(patchDeviceId) && string.IsNullOrEmpty(patchPlatform))
+				return;
 
 			//Check for Player
 			if(string.IsNullOrEmpty(player.Id))
@@ -377,7 +405,43 @@ namespace Conclify
 					break;
 			    }
 		    }
-	    }
+		}
+
+		//Email Validation Method
+		//---------------------------------------------------------------------
+
+		/// <summary>
+		/// Determines if the supplied string follows a valid email address pattern or not
+		/// </summary>
+		/// <param name="email">Email string to check for validity</param>
+		/// <returns>Indicates if the supplied string follows a valid email address pattern or not</returns>
+		public bool IsValidEmail(string email)
+	    {
+			//Check String
+			if(string.IsNullOrEmpty(email))
+				return false;
+
+			//Declare Validitity
+			bool valid = true;
+
+			//Replace Unicode Domain Names With ASCII Equivalence
+		    email = Regex.Replace(email, @"(@)(.+)$", match =>
+													{
+														string domainName = match.Groups[2].Value;
+														try
+														{
+															domainName = (new IdnMapping()).GetAscii(domainName);
+														}
+														catch(ArgumentException)
+														{
+															valid = false;
+														}
+														return match.Groups[1].Value + domainName;
+													});
+
+			//Check for Still Valid & Perform Regx Matching Check
+			return (valid && Regex.IsMatch(email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$", RegexOptions.IgnoreCase));
+		}
 
 		//Event Firing Methods
 		//---------------------------------------------------------------------
@@ -385,7 +449,7 @@ namespace Conclify
 		/// <summary>
 		/// Raises a player updated event with all registerd handlers
 		/// </summary>
-	    private void RaisePlayerUpdatedEvent()
+		private void RaisePlayerUpdatedEvent()
 	    {
 			//Copy Delegate
 		    ConclifyApiPlayerUpdatedHandler tempDelegate = playerUpdatedHandlers;

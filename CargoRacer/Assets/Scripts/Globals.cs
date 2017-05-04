@@ -11,13 +11,13 @@
 
     public static string PlayerName;
 
-
+    public static int Level = 1;
 
     //Constants
     public static int MaximumLives = 4;
     public static float NominalSpeed = 40f;
     public static float ClippingDistance = 400f;
-    
+    public static int TotalLevels = 3;
     
     public static void Reset()
     {
@@ -29,8 +29,8 @@
         GameState = GameState.Playing;
         Distance = 0;
         PackagesDelivered = 0;
-        
-        
+
+        Level = 1;
     }
 }
 
