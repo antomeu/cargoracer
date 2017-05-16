@@ -18,6 +18,7 @@
     public static float NominalSpeed = 40f;
     public static float ClippingDistance = 400f;
     public static int TotalLevels = 3;
+    public static int LevelTreshold = 10;
     
     public static void Reset()
     {

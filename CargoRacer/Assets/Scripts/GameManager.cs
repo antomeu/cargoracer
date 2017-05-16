@@ -22,9 +22,9 @@ public class GameManager : MonoBehaviour {
 	        EndGame();
 	    }
 
-        if (Globals.PackagesDelivered >= 10)
+        if (Globals.PackagesDelivered >= Globals.LevelTreshold)
             Globals.Level = 2;
-        if (Globals.PackagesDelivered >= 20)
+        if (Globals.PackagesDelivered >= Globals.LevelTreshold * 2 )
             Globals.Level = 3;
         
     }
