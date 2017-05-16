@@ -16,8 +16,8 @@ public class EndGameManager : MonoBehaviour
     public InputField InputFieldEmail;
     public ConclifyApi Api;
 
-	void Start ()
-	{
+    void Start()
+    {
         ButtonRestart.enabled = false;
         TextRestart.enabled = false;
         Api.GameUpdated += HandleGameUpdated;
@@ -35,8 +35,8 @@ public class EndGameManager : MonoBehaviour
 
 
     public void SetPlayerScore()
-	{
-        if (InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress))
+    {
+        if ((InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress) )&& (Api.IsValidEmail(InputFieldEmail.textComponent.text) || Api.IsValidEmail(Api.Player.EmailAddress)) )
         {
             //InputFieldEmail.textComponent.text = Api.Player.EmailAddress; // if player wants to resubmit
             InputFieldEmail.gameObject.SetActive(false);
@@ -50,6 +50,10 @@ public class EndGameManager : MonoBehaviour
             Api.RequestGameScoresGet();
             ButtonRestart.enabled = true;
             TextRestart.enabled = true;
+        }
+        else
+        {
+            InputFieldEmail.text = "Please enter a valid e-mail address";
         }
 
 
