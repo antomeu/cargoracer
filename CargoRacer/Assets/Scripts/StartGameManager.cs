@@ -14,7 +14,7 @@ public class StartGameManager : MonoBehaviour {
     public Button StartButton;
     public ConclifyApi Api;
 
-    private bool PlayerExistsInApi;
+    private bool CanStartGame;
 	
 	void Start () {
         MovingWorld.SetActive(false);
@@ -29,7 +29,7 @@ public class StartGameManager : MonoBehaviour {
             InputFieldName.gameObject.SetActive(true);
             ForgetPlayerButton.gameObject.SetActive(false);
             StartButton.gameObject.SetActive(false);
-            PlayerExistsInApi = false;
+            CanStartGame = false;
         }
         else //If player exists
         {
@@ -37,18 +37,31 @@ public class StartGameManager : MonoBehaviour {
             InputFieldName.gameObject.SetActive(false);
             ForgetPlayerButton.gameObject.SetActive(true);
             StartButton.gameObject.SetActive(true);
-            PlayerExistsInApi = true;
+            CanStartGame = true;
+            TextWelcomeMessage.text = "WELCOME BACK " + Api.Player.FirstName + "!";
         }
     }
 	
-    public void StartGame()// triggered if start button is pressed (button in the background)
+    public void StartGame(int level)// triggered if start button is pressed (button in the background)
     {
-        if (PlayerExistsInApi || !string.IsNullOrEmpty(TextEnteredPlayerName.text))
+        if (CanStartGame)
         {
-            if (!PlayerExistsInApi) Globals.PlayerName = TextEnteredPlayerName.text;
             MovingWorld.SetActive(true);
             transform.gameObject.SetActive(false);
+            Globals.Level = level;
             //TODO: Set chosen difficulty here
+        }
+    }
+
+    public void AllowStartGame()
+    {
+        if (!string.IsNullOrEmpty(TextEnteredPlayerName.text))
+        {
+            CanStartGame = true;
+            InputFieldName.gameObject.SetActive(false);
+            StartButton.gameObject.SetActive(true);
+            Globals.PlayerName = TextEnteredPlayerName.text;
+            TextWelcomeMessage.text = "WELCOME " + Globals.PlayerName;
         }
     }
 
