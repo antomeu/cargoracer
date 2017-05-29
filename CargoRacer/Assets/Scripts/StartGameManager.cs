@@ -45,9 +45,10 @@ public class StartGameManager : MonoBehaviour {
     {
         if (PlayerExistsInApi || !string.IsNullOrEmpty(TextEnteredPlayerName.text))
         {
-            Globals.PlayerName = TextEnteredPlayerName.text;
+            if (!PlayerExistsInApi) Globals.PlayerName = TextEnteredPlayerName.text;
             MovingWorld.SetActive(true);
             transform.gameObject.SetActive(false);
+            //TODO: Set chosen difficulty here
         }
     }
 
