@@ -36,12 +36,19 @@ public class GameManager : MonoBehaviour {
         Globals.GameState = GameState.End;
 
         UIController.EndGamePanel.SetActive(true);
+        
+        //TODO: Activate ending camera
+        //TODO: Deactivate UI
+        
+        
         //UIController.EndGamePanel.GetComponent<EndGameManager>().SetPlayerScore();
 		
 
 		//UIController.EndGameScore.text = "YOUR SCORE IS:\n" + Globals.PackagesDelivered.ToString() + "\n";
 
-        if (Input.GetKeyDown(KeyCode.Escape)) // for PC
+
+
+        if (Input.GetKeyDown(KeyCode.Escape)) // for PC testing
         {
             Restart();
         }

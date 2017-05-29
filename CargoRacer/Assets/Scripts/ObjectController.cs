@@ -20,9 +20,9 @@ public class ObjectController : MonoBehaviour {
     private void MoveObject()
     {
         if (ObjectType == ObjectType.OncomingVehicle)
-            transform.position += ( 5   + Globals.Speed) * Time.deltaTime * Vector3.back;
+            transform.position += ( Globals.TrafficSpeed[Globals.Level]   + Globals.Speed) * Time.deltaTime * Vector3.back;
         else if (ObjectType == ObjectType.SameLaneVehicle)
-            transform.position += (-5   + Globals.Speed) * Time.deltaTime * Vector3.back;
+            transform.position += (-Globals.TrafficSpeed[Globals.Level]   + Globals.Speed) * Time.deltaTime * Vector3.back;
         else
             transform.position += Globals.Speed * Time.deltaTime * Vector3.back;
     }
