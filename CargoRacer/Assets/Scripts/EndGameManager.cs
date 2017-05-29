@@ -18,7 +18,7 @@ public class EndGameManager : MonoBehaviour
 
     void Start()
     {
-        ButtonRestart.enabled = false;
+        //ButtonRestart.enabled = false;
         TextRestart.enabled = false;
         Api.GameUpdated += HandleGameUpdated;
         HandleGameUpdated();
@@ -48,7 +48,7 @@ public class EndGameManager : MonoBehaviour
             HandleGameUpdated();
             
             Api.RequestGameScoresGet();
-            ButtonRestart.enabled = true;
+            //ButtonRestart.enabled = true;
             TextRestart.enabled = true;
         }
         else

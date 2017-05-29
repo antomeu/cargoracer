@@ -32,8 +32,8 @@ public class GameManager : MonoBehaviour {
     void EndGame()
     {
 
-        Globals.Speed = 0;
-        Globals.GameState = GameState.End;
+        //Globals.Speed = 0;
+        //Globals.GameState = GameState.End;
 
         UIController.EndGamePanel.SetActive(true);
         

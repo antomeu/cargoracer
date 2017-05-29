@@ -38,7 +38,7 @@ public class StartGameManager : MonoBehaviour {
             ForgetPlayerButton.gameObject.SetActive(true);
             StartButton.gameObject.SetActive(true);
             CanStartGame = true;
-            TextWelcomeMessage.text = "WELCOME BACK " + Api.Player.FirstName + "!";
+            TextWelcomeMessage.text = "Welcome back " + Api.Player.FirstName + "!";
         }
     }
 	
@@ -61,7 +61,7 @@ public class StartGameManager : MonoBehaviour {
             InputFieldName.gameObject.SetActive(false);
             StartButton.gameObject.SetActive(true);
             Globals.PlayerName = TextEnteredPlayerName.text;
-            TextWelcomeMessage.text = "WELCOME " + Globals.PlayerName;
+            TextWelcomeMessage.text = "Welcome " + Globals.PlayerName;
         }
     }
 

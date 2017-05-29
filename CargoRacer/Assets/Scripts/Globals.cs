@@ -19,7 +19,7 @@
     public static float ClippingDistance = 400f;
 
     public static int TotalLevels = 3;
-    public static int[] TrafficSpeed = new int[3] {4,6,8 };
+    public static int[] TrafficSpeed = new int[3] {4,6,10 };
 
     public static int LevelTreshold = 10;
     
