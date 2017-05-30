@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour {
     //public APIManager APIManager;
     public GameObject StartGamePanel;
 
+    
+
 	void Start () {
         Globals.Reset();
         StartGamePanel.SetActive(true);
@@ -65,5 +67,13 @@ public class GameManager : MonoBehaviour {
         //APIManager.StartCoroutine("Start");
         //UIController.NetworkDebugData.text = APIManager.Response;
         
+    }
+
+    public void PauseGame(bool isNotPaused)
+    {
+        if (isNotPaused) // then pause game
+            Globals.GameState = GameState.Paused;
+        else // then unpause game
+            Globals.GameState = GameState.Playing;
     }
 }

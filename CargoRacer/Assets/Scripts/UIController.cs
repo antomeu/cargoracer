@@ -53,4 +53,25 @@ public class UIController : MonoBehaviour
 
     
     }
+
+    public void OpenURL(string url)
+    {
+        Application.OpenURL(url);
+    }
+
+    public void ToggleMusic()
+    {
+
+    }
+
+    public void ToggleAudio()
+    {
+        
+    }
+    
+
+    public void QuitApplication()
+    {
+        Application.Quit();
+    }
 }

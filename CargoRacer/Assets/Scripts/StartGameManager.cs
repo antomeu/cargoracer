@@ -49,7 +49,6 @@ public class StartGameManager : MonoBehaviour {
             MovingWorld.SetActive(true);
             transform.gameObject.SetActive(false);
             Globals.Level = level;
-            //TODO: Set chosen difficulty here
         }
     }
 

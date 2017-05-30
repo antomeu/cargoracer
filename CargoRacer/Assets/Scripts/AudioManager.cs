@@ -13,14 +13,31 @@ public class AudioManager : MonoBehaviour {
     public AudioSource CannotPickUp;
     public AudioSource TurnSkid;
 
+    public AudioSource[] Music;
+    public int MusicIndex = 0;
+
+    public AudioListener AudioListener;
+
     public float NormalPitch = 0.44f;
     // Use this for initialization
     void Start () {
-		
+		Music[MusicIndex].Play();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public void Update () {
         EngineLoop.pitch = NormalPitch * (Globals.Speed / Globals.NominalSpeed);
 	}
+
+    public void NextMusic()
+    {
+        Music[MusicIndex].Stop();
+        MusicIndex = (MusicIndex < Music.Length-1) ? MusicIndex + 1 : 0;
+        Music[MusicIndex].Play();
+    }
+
+    public void ToggleAudio(bool active)
+    {
+        AudioListener.gameObject.SetActive(active);
+    }
 }
