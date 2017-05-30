@@ -28,7 +28,11 @@ public class GameManager : MonoBehaviour {
             Globals.Level = 2;
         if (Globals.PackagesDelivered >= Globals.LevelTreshold * 2 )
             Globals.Level = 3;
-        
+
+        if (Input.GetKeyDown(KeyCode.Escape)) // for PC testing
+        {
+            Restart();
+        }
     }
 
     void EndGame()
@@ -50,10 +54,6 @@ public class GameManager : MonoBehaviour {
 
 
 
-        if (Input.GetKeyDown(KeyCode.Escape)) // for PC testing
-        {
-            Restart();
-        }
     }
     public void Restart()
     {

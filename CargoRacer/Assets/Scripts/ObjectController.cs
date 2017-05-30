@@ -10,7 +10,7 @@ public class ObjectController : MonoBehaviour {
 	}
 
     void FixedUpdate() {
-        if (Globals.GameState == GameState.Playing)
+        if (Globals.GameState == GameState.Playing || Globals.GameState == GameState.End)
         {
             MoveObject();
             CullObject();
