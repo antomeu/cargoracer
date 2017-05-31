@@ -49,6 +49,7 @@ public class StartGameManager : MonoBehaviour {
             MovingWorld.SetActive(true);
             transform.gameObject.SetActive(false);
             Globals.Level = level;
+            TextWelcomeMessage.text = "Welcome back " + Api.Player.FirstName + "!";
         }
     }
 

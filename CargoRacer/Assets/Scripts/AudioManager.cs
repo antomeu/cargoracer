@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour {
 
@@ -14,14 +15,16 @@ public class AudioManager : MonoBehaviour {
     public AudioSource TurnSkid;
 
     public AudioSource[] Music;
-    public int MusicIndex = 0;
+    //public int Globals.MusicIndex = 0;
 
     public AudioListener AudioListener;
+
+    public Text MusicNumber;
 
     public float NormalPitch = 0.44f;
     // Use this for initialization
     void Start () {
-		Music[MusicIndex].Play();
+		Music[Globals.MusicIndex].Play();
 	}
 	
 	// Update is called once per frame
@@ -31,9 +34,10 @@ public class AudioManager : MonoBehaviour {
 
     public void NextMusic()
     {
-        Music[MusicIndex].Stop();
-        MusicIndex = (MusicIndex < Music.Length-1) ? MusicIndex + 1 : 0;
-        Music[MusicIndex].Play();
+        Music[Globals.MusicIndex].Stop();
+        Globals.MusicIndex = (Globals.MusicIndex < Music.Length-1) ? Globals.MusicIndex + 1 : 0;
+        Music[Globals.MusicIndex].Play();
+        MusicNumber.text =  (Globals.MusicIndex+1).ToString();
     }
 
     public void ToggleAudio(bool active)

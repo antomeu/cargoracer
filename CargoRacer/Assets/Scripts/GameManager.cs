@@ -9,7 +9,10 @@ public class GameManager : MonoBehaviour {
     //public APIManager APIManager;
     public GameObject StartGamePanel;
 
-    
+    public Camera GameCamera;
+    public Camera EndCamera;
+    public GameObject GameUI;
+    public Collider PlayerCollider;
 
 	void Start () {
         Globals.Reset();
@@ -39,13 +42,13 @@ public class GameManager : MonoBehaviour {
     {
 
         //Globals.Speed = 0;
-        //Globals.GameState = GameState.End;
+        Globals.GameState = GameState.End;
 
         UIController.EndGamePanel.SetActive(true);
-        
+
         //TODO: Activate ending camera
         //TODO: Deactivate UI
-        
+        ToggleEndAnimation(false);
         
         //UIController.EndGamePanel.GetComponent<EndGameManager>().SetPlayerScore();
 		
@@ -55,12 +58,23 @@ public class GameManager : MonoBehaviour {
 
 
     }
+
+    void ToggleEndAnimation(bool IsRestart)
+    {
+        EndCamera.gameObject.SetActive(!IsRestart); //false
+        GameCamera.gameObject.SetActive(IsRestart); //true
+        GameUI.SetActive(IsRestart); //true
+        PlayerCollider.enabled = IsRestart;//true
+    }
+
+
     public void Restart()
     {
 
         Globals.Reset();
         SceneManager.LoadScene(0, LoadSceneMode.Single);
         StartGamePanel.SetActive(true);
+        ToggleEndAnimation(true);
     }
     void SendScore()
     {
