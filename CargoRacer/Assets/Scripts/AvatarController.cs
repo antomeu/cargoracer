@@ -51,9 +51,14 @@ public class AvatarController : MonoBehaviour
             MoveAvatarSideWays();
             isButtonLeftPressed = false;
             isButtonRightPressed = false;
-            ManageSpeed();
-            Globals.Speed = speed;
+            ManageSpeed(Globals.NominalSpeed + Globals.SpeedIncrease[Globals.Level - 1]);
+            Globals.Speed = speed ;
             Globals.Distance += speed / Time.deltaTime;
+        }
+        else if (Globals.GameState == GameState.End)
+        {
+            ManageSpeed(10);
+            Globals.Speed = speed;
         }
 
     }
@@ -101,15 +106,17 @@ public class AvatarController : MonoBehaviour
 
     }
 
-    void ManageSpeed()
+    void ManageSpeed(float targetSpeed)
     {
-        if (Mathf.Abs(speed - Globals.NominalSpeed) > 0.1)
+
+        if (Mathf.Abs(speed - targetSpeed) > 0.1)
         {
-            speed += (-speed + Globals.NominalSpeed) * AccelerationRate * Time.deltaTime;
+            speed += (-speed + targetSpeed) * AccelerationRate * Time.deltaTime;
         }
         else
         {
-            speed = Globals.NominalSpeed;
+            speed = targetSpeed;
+
         }
     }
 
