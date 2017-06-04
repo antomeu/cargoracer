@@ -18,11 +18,13 @@
     //Constants
     public static int MaximumLives = 4;
     public static float NominalSpeed = 40f;
+    public static float BoostAddition = 40f;
+    public static float PenaltySpeed = 25f;
     public static float ClippingDistance = 400f;
 
     public static int TotalLevels = 3;
     public static int[] TrafficSpeed = new int[3] {6,6,6 };
-    public static int[] SpeedIncrease = new int[3] { 0, 10, 20 };
+    public static int[] SpeedIncrease = new int[3] { 0, 10, 25 };
 
     public static int LevelTreshold = 10;
     

@@ -44,8 +44,11 @@ namespace Conclify.Requests
 		//---------------------------------------------------------------------
 
 		/// <summary>Api object to coordiante with</summary>
-		protected ConclifyApi ConclifyApi
-		{ get { return api; } }
+		public ConclifyApi ConclifyApi
+		{
+			get { return api; } 
+			internal set { api = value; }
+		}
 
 		/// <summary>Coroutine for the in-progress request</summary>
 		public Coroutine Coroutine

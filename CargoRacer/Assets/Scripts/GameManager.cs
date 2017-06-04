@@ -27,9 +27,9 @@ public class GameManager : MonoBehaviour {
 	        EndGame();
 	    }
 
-        if (Globals.PackagesDelivered >= Globals.LevelTreshold)
+        if (Globals.PackagesDelivered >= Globals.LevelTreshold && Globals.Level == 1)
             Globals.Level = 2;
-        if (Globals.PackagesDelivered >= Globals.LevelTreshold * 2 )
+        if (Globals.PackagesDelivered >= Globals.LevelTreshold * 2 && Globals.Level == 2)
             Globals.Level = 3;
 
         if (Input.GetKeyDown(KeyCode.Escape)) // for PC testing

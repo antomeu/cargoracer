@@ -126,17 +126,17 @@ public class AvatarController : MonoBehaviour
         //Debug.Log(other.gameObject.name);
         if (otherObjectType == ObjectType.SameLaneVehicle)
         {
-            speed = 15f;
+            speed = Globals.NominalSpeed - Globals.PenaltySpeed;
             CrashIntoTraffic();
         }
         else if (otherObjectType == ObjectType.OncomingVehicle)
         {
-            speed = 5f;
+            speed = Globals.NominalSpeed - (Globals.PenaltySpeed +10f);
             CrashIntoTraffic();
         }
         else if (otherObjectType == ObjectType.BonusBoost)
         {
-            speed = 80f;
+            speed = Globals.NominalSpeed + Globals.BoostAddition;
             ParticleBoost.Play();
             AudioManager.Boost.Play();
         }

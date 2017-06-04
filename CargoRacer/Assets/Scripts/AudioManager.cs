@@ -42,6 +42,6 @@ public class AudioManager : MonoBehaviour {
 
     public void ToggleAudio(bool active)
     {
-        AudioListener.gameObject.SetActive(active);
+        AudioListener.volume = System.Convert.ToSingle(active);
     }
 }

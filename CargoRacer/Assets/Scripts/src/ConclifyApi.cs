@@ -13,7 +13,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using Conclify.Game;
 using Conclify.Player;
@@ -76,6 +78,12 @@ namespace Conclify
 			remove { gameUpdatedHandlers -= value; }
 		}
 
+	    //Constants
+	    //---------------------------------------------------------------------
+
+	    /// <summary>Path to the save file for the player data</summary>
+	    private const string FilePathFormat = "{0}/conclify.requests";
+
 		//Fields
 		//---------------------------------------------------------------------
 
@@ -91,11 +99,8 @@ namespace Conclify
 		//Request Fields
 		//---------------------------------------------------------------------
 
-		/// <summary>Queue of pending API requests</summary>
-		private Queue<ConclifyApiRequest> requestQueue = new Queue<ConclifyApiRequest>();
-
-		/// <summary>API request currently being processed</summary>
-	    private ConclifyApiRequest currentRequest = null;
+	    /// <summary>List of pending API requests</summary>
+	    private Queue<ConclifyApiRequest> requestQueue = null;
 
 		//Properties
 		//---------------------------------------------------------------------
@@ -141,6 +146,9 @@ namespace Conclify
 
 			//Attempt to Load Game Data, Otherwise Create New Game
 			game = (ConclifyApiGame.Load() ?? new ConclifyApiGame());
+
+			//Attempt to Load Request Queue, Otherwise Create New Queue
+			requestQueue = (LoadRequestQueue() ?? new Queue<ConclifyApiRequest>());
 		}
 
 		//Start Methods
@@ -186,7 +194,17 @@ namespace Conclify
 		/// </summary>
 	    IEnumerator CoUpdate()
 		{
-			//Check for Currently Processing Request
+			//Retrieve Next Request
+			ConclifyApiRequest currentRequest = (requestQueue.Any() ? requestQueue.Peek() : null);
+
+			//Find First Valid Request
+			while((currentRequest != null) && !currentRequest.CanExecute)
+			{
+				requestQueue.Dequeue();
+				currentRequest = requestQueue.Peek();
+			}
+
+			//Check for Request
 			if(currentRequest != null)
 			{
 				//Yield Request Coroutine
@@ -199,26 +217,21 @@ namespace Conclify
 					ConclifyApiResponse response = ConclifyApiResponse.ParseJson((currentRequest.Result as string), GameType);
 					if(response != null)
 						ProcessResponse(currentRequest, response);
+
+					//Remove Head of Queue
+					requestQueue.Dequeue();
+
+					//Save Requests
+					SaveRequestQueue();
 				}
 				else
 				{
 					//Log Failure
 					print(currentRequest.Result);
+
+					//Wait, Before Retrying
+					yield return new WaitForSecondsRealtime(60.0f);
 				}
-
-				//Clear Current Request
-				currentRequest = null;
-			}
-
-			//Check for Pending Requests
-			if(requestQueue.Any())
-			{
-				//Pop Next Request for Processing
-				currentRequest = requestQueue.Dequeue();
-				
-				//Check for Valid Request
-				if(!currentRequest.CanExecute)
-					currentRequest = null;
 			}
 		}
 
@@ -248,6 +261,9 @@ namespace Conclify
 
 			//Enqueue Player Post Request
 			requestQueue.Enqueue(new ConclifyApiRequestPlayerPost(this));
+
+			//Save Requests
+			SaveRequestQueue();
 		}
 
 		/// <summary>
@@ -283,7 +299,10 @@ namespace Conclify
 
 			//Queue Player Patch Request
 			requestQueue.Enqueue(new ConclifyApiRequestPlayerPatch(this, patchFirstName, patchLastName, patchEmailAddress, patchCountry, patchDeviceId, patchPlatform));
-	    }
+
+		    //Save Requests
+		    SaveRequestQueue();
+		}
 
 		/// <summary>
 		/// Sends a player score post request to the API
@@ -301,7 +320,10 @@ namespace Conclify
 			
 		    //Queue Player Score Post Request
 			requestQueue.Enqueue(new ConclifyApiRequestPlayerScorePost(this, score));
-	    }
+
+		    //Save Requests
+		    SaveRequestQueue();
+		}
 
 		/// <summary>
 		/// Sends a game scores get request to the API
@@ -314,6 +336,9 @@ namespace Conclify
 
 			//Queue Game Score Get Request
 			requestQueue.Enqueue(new ConclifyApiRequestGameScoresGet(this));
+
+			//Save Requests
+			SaveRequestQueue();
 		}
 
 		//Response Processing Methods
@@ -442,6 +467,99 @@ namespace Conclify
 			//Check for Still Valid & Perform Regx Matching Check
 			return (valid && Regex.IsMatch(email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$", RegexOptions.IgnoreCase));
 		}
+
+	    //Load and Save Methods
+	    //---------------------------------------------------------------------
+
+	    /// <summary>
+	    /// Loads a request queue from persistent storage
+	    /// </summary>
+	    private Queue<ConclifyApiRequest> LoadRequestQueue()
+	    {
+		    //Declare File Path
+		    string filePath = string.Format(FilePathFormat, Application.persistentDataPath);
+
+		    //Check for File
+		    if(!File.Exists(filePath))
+			    return null;
+
+		    //Create Formatter
+		    BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+			//Declare File
+			FileStream file = null;
+
+		    try
+		    {
+			    //Open File
+			    file = File.Open(filePath, FileMode.Open);
+
+			    //Deserialise Player
+			    Queue<ConclifyApiRequest> queue = (Queue<ConclifyApiRequest>)binaryFormatter.Deserialize(file);
+			    if(queue != null)
+			    {
+					//Restore API Links
+				    foreach(ConclifyApiRequest request in queue)
+					    request.ConclifyApi = this;
+			    }
+
+				//Return Queue
+			    return queue;
+		    }
+		    catch(Exception)
+			{
+				/* Nothing to Do! */
+				return null;
+		    }
+		    finally
+		    {
+				//Check for File
+			    if(file != null)
+				{
+					//Close File
+					file.Close();
+					file = null;
+				}
+			}
+	    }
+
+	    /// <summary>
+	    /// Saves the current request queue to persistent storage
+	    /// </summary>
+	    public void SaveRequestQueue()
+	    {
+		    //Declare File Path
+		    string filePath = string.Format(FilePathFormat, Application.persistentDataPath);
+
+		    //Create Formatter
+		    BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+		    //Declare File
+		    FileStream file = null;
+
+		    try
+		    {
+			    //Open File
+			    file = File.Create(filePath);
+
+			    //Serialise Player
+			    binaryFormatter.Serialize(file, requestQueue);
+		    }
+		    catch(Exception)
+		    {
+			    /* Nothing to Do! */
+		    }
+		    finally
+			{
+				//Check for File
+				if(file != null)
+				{
+					//Close File
+					file.Close();
+					file = null;
+				}
+			}
+	    }
 
 		//Event Firing Methods
 		//---------------------------------------------------------------------
