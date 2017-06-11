@@ -7,9 +7,7 @@ public class DecorationLevelController : MonoBehaviour {
 
     public void Start()
     {
-        DecorationForLevel[0].SetActive(true);
-        DecorationForLevel[1].SetActive(false);
-        DecorationForLevel[2].SetActive(false);
+        SwitchDecorationForLevelChange(Globals.Level);
     }
 
     public void SwitchDecorationForLevelChange(int level)
@@ -21,5 +19,8 @@ public class DecorationLevelController : MonoBehaviour {
             else
                 DecorationForLevel[i].SetActive(false);
         }
+        if (level == 4 && transform.position.x > 0) //move big buildings on the right slightly away
+            DecorationForLevel[level-1].transform.localPosition = new Vector3(-15, 0, 0);
+
     }
 }

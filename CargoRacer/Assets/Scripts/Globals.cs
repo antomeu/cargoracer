@@ -22,11 +22,11 @@
     public static float PenaltySpeed = 25f;
     public static float ClippingDistance = 400f;
 
-    public static int TotalLevels = 3;
-    public static int[] TrafficSpeed = new int[3] {6,6,6 };
-    public static int[] SpeedIncrease = new int[3] { 0, 10, 25 };
+    public static int TotalLevels = 4;
+    public static int[] TrafficSpeed = new int[4] {6,6,6,6 };
+    public static int[] SpeedIncrease = new int[4] { 0, 10, 25, 35 };
 
-    public static int LevelTreshold = 10;
+    public static int LevelTreshold = 2;
     
     
     public static void Reset()
