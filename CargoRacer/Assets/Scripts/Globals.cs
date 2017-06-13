@@ -26,8 +26,8 @@
     public static int[] TrafficSpeed = new int[4] {6,6,6,6 };
     public static int[] SpeedIncrease = new int[4] { 0, 10, 25, 35 };
 
-    public static int LevelTreshold = 2;
-    
+    public static int LevelTreshold = 10;
+    public static int StartingLevel;
     
     public static void Reset()
     {

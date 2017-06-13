@@ -34,7 +34,8 @@ public class EndGameManager : MonoBehaviour
 
     public void SetPlayerScore()
     {
-        if ((InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress) )&& (Api.IsValidEmail(InputFieldEmail.textComponent.text) || Api.IsValidEmail(Api.Player.EmailAddress)) )
+        if ((InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress) )&& 
+            (Api.IsValidEmail(InputFieldEmail.textComponent.text) || Api.IsValidEmail(Api.Player.EmailAddress)) )
         {
             //InputFieldEmail.textComponent.text = Api.Player.EmailAddress; // if player wants to resubmit
             InputFieldEmail.gameObject.SetActive(false);
@@ -47,7 +48,7 @@ public class EndGameManager : MonoBehaviour
             
             Api.RequestGameScoresGet();
         }
-        else
+        else if (InputFieldEmail.textComponent.text != string.Empty && Api.IsValidEmail(InputFieldEmail.textComponent.text))
         {
             InputFieldEmail.text = "Please enter a valid e-mail address";
         }

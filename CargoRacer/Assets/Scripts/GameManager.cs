@@ -26,16 +26,13 @@ public class GameManager : MonoBehaviour {
 	    {
 	        EndGame();
 	    }
-        /*
-        if (Globals.PackagesDelivered >= Globals.LevelTreshold && Globals.Level == 1)
-            Globals.Level = 2;
-        if (Globals.PackagesDelivered >= Globals.LevelTreshold * 2 && Globals.Level == 2)
-            Globals.Level = 3;
-        if (Globals.PackagesDelivered >= Globals.LevelTreshold * 2 && Globals.Level == 3)
-            Globals.Level = 4;
-            */
-        if (Globals.PackagesDelivered / Globals.LevelTreshold >= Globals.Level && Globals.Level < Globals.TotalLevels)
-        { Globals.Level = Globals.PackagesDelivered / Globals.LevelTreshold + 1; Debug.Log(Globals.Level); }
+
+
+        if (Globals.PackagesDelivered >= Globals.LevelTreshold * (Globals.Level - Globals.StartingLevel + 1) && Globals.Level < Globals.TotalLevels )
+        {
+            Globals.Level = Globals.StartingLevel + Globals.PackagesDelivered / Globals.LevelTreshold;
+            Debug.Log(Globals.Level);
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape)) // for PC testing
         {

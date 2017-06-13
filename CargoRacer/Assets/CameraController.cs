@@ -11,8 +11,8 @@ public class CameraController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.eulerAngles = (Globals.Speed - (Globals.NominalSpeed + Globals.SpeedIncrease[Globals.Level]) )* Vector3.up;
+        //transform.eulerAngles = (Globals.Speed - (Globals.NominalSpeed + Globals.SpeedIncrease[Globals.Level]) )* Vector3.up;
 	}
 
-    void 
+     
 }
