@@ -9,12 +9,11 @@ using Conclify.Game;
 
 public class EndGameManager : MonoBehaviour
 {
-    //public InputField InputName;
-    public Button ButtonRestart; // Show when player name is submitter
     public Text TextRestart;
     public LeaderBoardsManager LeaderBoardManager;
     public InputField InputFieldEmail;
     public ConclifyApi Api;
+    public GameObject DisclaimerPanel;
 
     void Start()
     {
@@ -23,7 +22,11 @@ public class EndGameManager : MonoBehaviour
         Api.PlayerUpdated += PlayerUpdated;
         Api.RequestGameScoresGet();
         Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
-        SetPlayerScore();
+
+        if (!string.IsNullOrEmpty(Api.Player.EmailAddress) && Api.IsValidEmail(Api.Player.EmailAddress)) // check that api has an email for this user and that it is valid
+            SetPlayerScore(); //send score
+        else
+            InputFieldEmail.gameObject.SetActive(true); //Activate input field
     }
 
     void PlayerUpdated()
@@ -34,26 +37,20 @@ public class EndGameManager : MonoBehaviour
 
     public void SetPlayerScore()
     {
-        if ((InputFieldEmail.textComponent.text != string.Empty || !string.IsNullOrEmpty(Api.Player.EmailAddress) )&& 
-            (Api.IsValidEmail(InputFieldEmail.textComponent.text) || Api.IsValidEmail(Api.Player.EmailAddress)) )
-        {
-            //InputFieldEmail.textComponent.text = Api.Player.EmailAddress; // if player wants to resubmit
-            InputFieldEmail.gameObject.SetActive(false);
-            
-            Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
-            
-            Api.RequestPlayerScorePost(Globals.PackagesDelivered);
-            
-            HandleGameUpdated();
-            
-            Api.RequestGameScoresGet();
-        }
-        else if (InputFieldEmail.textComponent.text != string.Empty && Api.IsValidEmail(InputFieldEmail.textComponent.text))
-        {
+        InputFieldEmail.gameObject.SetActive(false);
+        Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
+        Api.RequestPlayerScorePost(Globals.PackagesDelivered);
+        HandleGameUpdated();
+        Api.RequestGameScoresGet();
+    }
+
+    public void CheckEmailValidity()
+    {
+        if (InputFieldEmail.textComponent.text != string.Empty &&  Api.IsValidEmail(InputFieldEmail.textComponent.text)) //if input is not empty, or email already exists AND email is valid (both in input and API)
+            DisclaimerPanel.SetActive( true);
+        else //if (InputFieldEmail.textComponent.text != string.Empty && Api.IsValidEmail(InputFieldEmail.textComponent.text))
             InputFieldEmail.text = "Please enter a valid e-mail address";
-        }
-
-
+        
     }
 
     private void HandleGameUpdated()
