@@ -12,11 +12,18 @@ public class EndGameManager : MonoBehaviour
     public Text TextRestart;
     public LeaderBoardsManager LeaderBoardManager;
     public InputField InputFieldEmail;
+    public Button SubmitScoreButton;
     public ConclifyApi Api;
-    public GameObject DisclaimerPanel;
+    public GameObject DisclaimerButton;
+    public GameObject EmailPanel;
+    public GameObject SubmitButton;
 
     void Start()
     {
+        EmailPanel.SetActive(false);
+        DisclaimerButton.SetActive(false);
+        SubmitButton.SetActive(false);
+
         Api.GameUpdated += HandleGameUpdated;
         HandleGameUpdated();
         Api.PlayerUpdated += PlayerUpdated;
@@ -24,9 +31,12 @@ public class EndGameManager : MonoBehaviour
         Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
 
         if (!string.IsNullOrEmpty(Api.Player.EmailAddress) && Api.IsValidEmail(Api.Player.EmailAddress)) // check that api has an email for this user and that it is valid
+        {
             SetPlayerScore(); //send score
+            SubmitScoreButton.gameObject.SetActive(false); //Deactivate email dialogue
+        }
         else
-            InputFieldEmail.gameObject.SetActive(true); //Activate input field
+            SubmitScoreButton.gameObject.SetActive(true); //Activate email dialogue
     }
 
     void PlayerUpdated()
@@ -37,7 +47,7 @@ public class EndGameManager : MonoBehaviour
 
     public void SetPlayerScore()
     {
-        InputFieldEmail.gameObject.SetActive(false);
+        SubmitScoreButton.gameObject.SetActive(false);
         Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
         Api.RequestPlayerScorePost(Globals.PackagesDelivered);
         HandleGameUpdated();
@@ -47,7 +57,7 @@ public class EndGameManager : MonoBehaviour
     public void CheckEmailValidity()
     {
         if (InputFieldEmail.textComponent.text != string.Empty &&  Api.IsValidEmail(InputFieldEmail.textComponent.text)) //if input is not empty, or email already exists AND email is valid (both in input and API)
-            DisclaimerPanel.SetActive( true);
+            DisclaimerButton.SetActive( true);
         else //if (InputFieldEmail.textComponent.text != string.Empty && Api.IsValidEmail(InputFieldEmail.textComponent.text))
             InputFieldEmail.text = "Please enter a valid e-mail address";
         

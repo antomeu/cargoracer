@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
     public UIController UIController;
     //public APIManager APIManager;
     public GameObject StartGamePanel;
+    public GameObject SettingsPanel;
 
     public Camera GameCamera;
     public Camera EndCamera;
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour {
 	void Start () {
         Globals.Reset();
         StartGamePanel.SetActive(true);
-
+        SettingsPanel.SetActive(false);
     }
 
 	void Update ()

@@ -8,7 +8,7 @@ using Conclify.Game;
 public class StartGameManager : MonoBehaviour {
     public GameObject MovingWorld;
     public Text TextEnteredPlayerName;
-    public Text TextWelcomeMessage;
+    //public Text TextWelcomeMessage;
     public InputField InputFieldName;
     public Button ForgetPlayerButton;
     public Button StartButton;
@@ -19,7 +19,6 @@ public class StartGameManager : MonoBehaviour {
 	void Start () {
         MovingWorld.SetActive(false);
         InterfaceInit();
-
     }
 
     public void InterfaceInit()
@@ -38,7 +37,7 @@ public class StartGameManager : MonoBehaviour {
             ForgetPlayerButton.gameObject.SetActive(true);
             StartButton.gameObject.SetActive(true);
             CanStartGame = true;
-            TextWelcomeMessage.text = "Welcome back " + Api.Player.FirstName + "!";
+            //TextWelcomeMessage.text = "Welcome back " + Api.Player.FirstName + "!";
         }
     }
 	
@@ -50,7 +49,7 @@ public class StartGameManager : MonoBehaviour {
             transform.gameObject.SetActive(false);
             Globals.Level = level;
             Globals.StartingLevel = level;
-            TextWelcomeMessage.text = "Welcome back " + Api.Player.FirstName + "!";
+            //TextWelcomeMessage.text = "Welcome back " + Api.Player.FirstName + "!";
         }
     }
 
@@ -62,13 +61,14 @@ public class StartGameManager : MonoBehaviour {
             InputFieldName.gameObject.SetActive(false);
             StartButton.gameObject.SetActive(true);
             Globals.PlayerName = TextEnteredPlayerName.text;
-            TextWelcomeMessage.text = "Welcome " + Globals.PlayerName;
+            //TextWelcomeMessage.text = "Welcome " + Globals.PlayerName;
         }
     }
 
     public void ForgetPlayer()
     {
         Api.ForgetPlayer();
+        Debug.Log("id" + Api.Player.Id + " | Name: " + Api.Player.FirstName + " | email: " + Api.Player.EmailAddress);
         InterfaceInit();
     }
 }
