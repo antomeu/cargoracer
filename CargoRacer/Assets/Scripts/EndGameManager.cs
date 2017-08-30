@@ -20,7 +20,7 @@ public class EndGameManager : MonoBehaviour
 
     void Start()
     {
-        EmailPanel.SetActive(false);
+        EmailPanel.SetActive(true);
         DisclaimerButton.SetActive(false);
         SubmitButton.SetActive(false);
 
