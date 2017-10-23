@@ -32,11 +32,12 @@ public class EndGameManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(Api.Player.EmailAddress) && Api.IsValidEmail(Api.Player.EmailAddress)) // check that api has an email for this user and that it is valid
         {
-            SetPlayerScore(); //send score
-            SubmitScoreButton.gameObject.SetActive(false); //Deactivate email dialogue
+            //SetPlayerScore(); //send score
+            InputFieldEmail.text = Api.Player.EmailAddress; //Show email
+            SubmitScoreButton.gameObject.SetActive(true); //Activate submit button
         }
         else
-            SubmitScoreButton.gameObject.SetActive(true); //Activate email dialogue
+            SubmitScoreButton.gameObject.SetActive(false); //Deactivate submit button
     }
 
     void PlayerUpdated()

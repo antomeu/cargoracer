@@ -5,6 +5,8 @@
     public static float Speed;
     public static bool[] PackageSlotIsUsed = new bool[3];
 
+    public static bool EndAnimationIsFinished = false;
+
     public static GameState GameState;
     public static float Distance;
     public static int PackagesDelivered;
@@ -36,8 +38,8 @@
         for (int i = 0; i <= PackageSlotIsUsed.Length - 1; i++)
         { PackageSlotIsUsed[i] = false; }
 
-        GameState = GameState.Playing;
-        Distance = 0;
+        GameState = GameState.Start;
+        Distance = 0f;
         PackagesDelivered = 0;
 
         Level = 1;

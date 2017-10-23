@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour {
     public GameObject GameUI;
     public Collider PlayerCollider;
 
-	void Start () {
+ 
+
+
+    void Start () {
         Globals.Reset();
         StartGamePanel.SetActive(true);
         SettingsPanel.SetActive(false);
@@ -23,7 +26,7 @@ public class GameManager : MonoBehaviour {
 
 	void Update ()
 	{
-	    if (Globals.Lives <= 0 && Globals.GameState == GameState.Playing)
+	    if (Globals.Lives <= 0 && Globals.GameState == GameState.Playing && Globals.EndAnimationIsFinished)
 	    {
 	        EndGame();
 	    }
@@ -49,8 +52,7 @@ public class GameManager : MonoBehaviour {
 
         UIController.EndGamePanel.SetActive(true);
 
-        //TODO: Activate ending camera
-        //TODO: Deactivate UI
+
         ToggleEndAnimation(false);
         
         //UIController.EndGamePanel.GetComponent<EndGameManager>().SetPlayerScore();

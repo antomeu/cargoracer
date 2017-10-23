@@ -19,9 +19,12 @@ public class AvatarController : MonoBehaviour
     public ParticleSystem ParticleBoost;
     public ParticleSystem ParticleTurnLeft;
     public ParticleSystem ParticleTurnRight;
+    public ParticleSystem ParticleEndExplosion;
     public AudioManager AudioManager;
 
-    public UIController UIController; 
+    public UIController UIController;
+
+    public Animator AvatarAnimator;
     #endregion
 
     public float speed;
@@ -31,8 +34,7 @@ public class AvatarController : MonoBehaviour
     private bool hasReachedLane;
     private bool isButtonLeftPressed;
     private bool isButtonRightPressed;
-
-
+    
 
     void Start() {
         for (int i = 0; i <= 3; i++)
@@ -61,6 +63,12 @@ public class AvatarController : MonoBehaviour
             Globals.Speed = speed;
         }
 
+    }
+
+    void ManageAnimator()
+    {
+        AvatarAnimator.SetFloat("Lives",Globals.Lives);
+        AvatarAnimator.SetFloat("Speed",(Globals.Speed * 2)/(Globals.NominalSpeed + Globals.BoostAddition + Globals.SpeedIncrease[Globals.TotalLevels-1]));
     }
 
     public void ButtonLeftIsDown()
