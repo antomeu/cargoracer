@@ -56,6 +56,8 @@ public class AvatarController : MonoBehaviour
             ManageSpeed(Globals.NominalSpeed + Globals.SpeedIncrease[Globals.Level - 1]);
             Globals.Speed = speed ;
             Globals.Distance += speed / Time.deltaTime;
+            ManageAnimator();
+
         }
         else if (Globals.GameState == GameState.End)
         {
