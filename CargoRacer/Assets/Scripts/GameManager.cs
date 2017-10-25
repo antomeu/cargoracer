@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
 	{
 	    if (Globals.Lives <= 0 && Globals.GameState == GameState.Playing && Globals.EndAnimationIsFinished)
 	    {
-	        EndGame();
+            EndGame();
 	    }
 
 
@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour {
         GameCamera.gameObject.SetActive(IsRestart); //true
         GameUI.SetActive(IsRestart); //true
         PlayerCollider.enabled = IsRestart;//true
+        Globals.EndAnimationIsFinished = !IsRestart;
     }
 
 

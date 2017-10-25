@@ -22,7 +22,11 @@ public class AvatarController : MonoBehaviour
     public ParticleSystem ParticleEndExplosion;
     public AudioManager AudioManager;
 
+    
+
     public UIController UIController;
+
+    public Animator CameraAnimator;
 
     public Animator AvatarAnimator;
     #endregion
@@ -53,7 +57,12 @@ public class AvatarController : MonoBehaviour
             MoveAvatarSideWays();
             isButtonLeftPressed = false;
             isButtonRightPressed = false;
-            ManageSpeed(Globals.NominalSpeed + Globals.SpeedIncrease[Globals.Level - 1]);
+
+            if (Globals.Lives > 0)
+                ManageSpeed(Globals.NominalSpeed + Globals.SpeedIncrease[Globals.Level - 1]);
+            else
+                ManageSpeed(10);
+
             Globals.Speed = speed ;
             Globals.Distance += speed / Time.deltaTime;
             ManageAnimator();
@@ -149,6 +158,7 @@ public class AvatarController : MonoBehaviour
             speed = (Globals.NominalSpeed + Globals.SpeedIncrease[Globals.Level - 1]) + Globals.BoostAddition;
             ParticleBoost.Play();
             AudioManager.Boost.Play();
+            CameraAnimator.SetTrigger("Boost");
         }
         else if (otherObjectType == ObjectType.Package)
         {
@@ -166,8 +176,14 @@ public class AvatarController : MonoBehaviour
         Globals.Lives -= 1;
         ParticleCollision.Play();
         AudioManager.Crash.Play();
+        CameraAnimator.SetTrigger("Shock");
+
         if (Globals.Lives <= 0)
+        {
             AudioManager.FinalCrash.Play();
+            ParticleEndExplosion.Play();
+            CameraAnimator.SetTrigger("End");
+        }
     }
 
     void PickPackageUp(Collider other)
