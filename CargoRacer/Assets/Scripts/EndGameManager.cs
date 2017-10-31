@@ -58,7 +58,7 @@ public class EndGameManager : MonoBehaviour
     public void CheckEmailValidity()
     {
         if (InputFieldEmail.textComponent.text != string.Empty &&  Api.IsValidEmail(InputFieldEmail.textComponent.text)) //if input is not empty, or email already exists AND email is valid (both in input and API)
-            DisclaimerButton.SetActive( true);
+            SubmitScoreButton.gameObject.SetActive( true);
         else //if (InputFieldEmail.textComponent.text != string.Empty && Api.IsValidEmail(InputFieldEmail.textComponent.text))
             InputFieldEmail.text = "Please enter a valid e-mail address";
         
