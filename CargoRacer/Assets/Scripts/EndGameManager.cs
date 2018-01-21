@@ -13,16 +13,20 @@ public class EndGameManager : MonoBehaviour
     public LeaderBoardsManager LeaderBoardManager;
     public InputField InputFieldEmail;
     public Button SubmitScoreButton;
+    public Text SubmitScoreButtonText;
     public ConclifyApi Api;
     public GameObject DisclaimerButton;
     public GameObject EmailPanel;
     public GameObject SubmitButton;
+
+    private string SubmitText;
 
     void Start()
     {
         EmailPanel.SetActive(true);
         DisclaimerButton.SetActive(false);
         SubmitButton.SetActive(false);
+        SubmitText = SubmitScoreButtonText.text;
 
         Api.GameUpdated += HandleGameUpdated;
         HandleGameUpdated();
@@ -49,7 +53,7 @@ public class EndGameManager : MonoBehaviour
     public void SetPlayerScore()
     {
         SubmitScoreButton.gameObject.SetActive(false);
-        Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.textComponent.text);
+        Api.RequestPlayerPatch(Globals.PlayerName, emailAddress: InputFieldEmail.text);
         Api.RequestPlayerScorePost(Globals.PackagesDelivered);
         HandleGameUpdated();
         Api.RequestGameScoresGet();
@@ -57,11 +61,18 @@ public class EndGameManager : MonoBehaviour
 
     public void CheckEmailValidity()
     {
-        if (InputFieldEmail.textComponent.text != string.Empty &&  Api.IsValidEmail(InputFieldEmail.textComponent.text)) //if input is not empty, or email already exists AND email is valid (both in input and API)
-            SubmitScoreButton.gameObject.SetActive( true);
-        else //if (InputFieldEmail.textComponent.text != string.Empty && Api.IsValidEmail(InputFieldEmail.textComponent.text))
-            InputFieldEmail.text = "Please enter a valid e-mail address";
-        
+        bool isValidTest = Api.IsValidEmail(InputFieldEmail.text);
+        if (InputFieldEmail.text != string.Empty && Api.IsValidEmail(InputFieldEmail.text)) //if input is not empty, or email already exists AND email is valid (both in input and API)
+        {
+            SubmitScoreButton.gameObject.SetActive(true);
+            SubmitScoreButton.interactable = true;
+            SubmitScoreButtonText.text = SubmitText;
+        }
+        else //if (InputFieldEmail.text != string.Empty && Api.IsValidEmail(InputFieldEmail.text))
+        {
+            SubmitScoreButton.interactable = false;//InputFieldEmail.text = "Please enter a valid e-mail address";
+            SubmitScoreButtonText.text = "Please enter a valid e-mail address";
+        }
     }
 
     private void HandleGameUpdated()
